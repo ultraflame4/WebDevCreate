@@ -39,7 +39,7 @@ export default defineComponent<props>((props) => {
         ev.stopPropagation()
         let data = ev.dataTransfer.getData("el")
         //@ts-ignore
-        console.log(`Moving`,document.querySelector(data),`to be a child of`,itemRef.current)
+        console.log(`Moving`,document.querySelector(data),`to be a child of`,props.el)
     }
 
     return (

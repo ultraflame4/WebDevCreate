@@ -1,4 +1,4 @@
-import {defineComponent, ElementTreeContext, IElementTreeCtxObj} from "@/tools";
+import {defineComponent, ElementTreeContext, getDomPath, getQuerySelector, IElementTreeCtxObj} from "@/tools";
 import React, {useContext, useRef} from "react";
 
 interface props extends React.HTMLAttributes<HTMLLIElement> {
@@ -24,8 +24,26 @@ export default defineComponent<props>((props) => {
         context.currentlySelectedElement=itemRef.current
     }
 
+    function OnDragStart(ev: React.DragEvent<HTMLLIElement>) {
+        ev.stopPropagation()
+
+        ev.dataTransfer.setData("el",getQuerySelector(props.el))
+
+    }
+
+    function OnDragOver(ev:React.DragEvent<HTMLLIElement>){
+        ev.preventDefault()
+    }
+
+    function OnDrop(ev:React.DragEvent<HTMLLIElement>){
+        ev.stopPropagation()
+        let data = ev.dataTransfer.getData("el")
+        //@ts-ignore
+        console.log(`Moving`,document.querySelector(data),`to be a child of`,itemRef.current)
+    }
+
     return (
-        <li {...props} className={"element-tree-item"}>
+        <li {...props} className={"element-tree-item"} draggable={true} onDragOver={OnDragOver} onDragStart={OnDragStart} onDrop={OnDrop}>
             <p ref={itemRef} onClick={focusThis}>
                 {
                     props.el.childElementCount > 0 ?

@@ -16,7 +16,7 @@ export default defineComponent<props>((props, context) => {
         <li {...props} className={"element-tree-item"}>
             <p ref={itemRef}>
                 <a onClick={toggleChildren}><span className={"material-symbols-outlined"}>arrow_drop_down</span></a>
-                {props.el.id.length < 1 ? "unnamed" : props.el.id}
+                {props.el.id.length < 1 ? <i className={"unnamed"}>{props.el.tagName.toLowerCase()}</i>: props.el.id}
                 <span className={"tagname"}>&lt;{props.el.tagName.toLowerCase()}&gt;</span>
             </p>
             {props.children}

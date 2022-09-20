@@ -19,6 +19,12 @@
       font-weight: 500;
       font-size: 0.8em;
       color: grey;
+      padding-left: 4px;
+    }
+
+    .unnamed {
+
+      font-weight: 400;
     }
 
     & > p {
@@ -27,6 +33,7 @@
       align-items: center;
       -webkit-user-select: none;
       user-select: none;
+      font-weight: 600;
 
       a {
         display: flex;

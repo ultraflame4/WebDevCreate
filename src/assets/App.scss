@@ -28,7 +28,7 @@ $line-color: #ccc;
   padding: 0 1em;
 
 
-  & > h2{
+  & > h2 {
     margin: 0;
     display: flex;
     letter-spacing: 1px;
@@ -41,23 +41,45 @@ $line-color: #ccc;
 
 #sidebar {
   @extend .default-bg;
-  grid-column: 1 / 2;
-  grid-row: 2 / -2;
+  display: flex;
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
+  padding: 0.8rem;
+
+  grid-column: 1 / 2;
+  grid-row: 2 / -2;
+
   border-right: 1px solid $line-color;
   box-shadow: 2px 0 3px #ccc;
-  padding: 0.8rem;
-  box-sizing: border-box;
-  display: flex;
+  flex-direction: column;
   gap: 0.8rem;
 
-  #sidebar-tree {
-    border-radius: 1em;
+  >p{
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 0.9em;
+    flex-shrink: 0;
+  }
+
+  >div{
+    border-radius: 0.8em;
     border: 1px solid $line-color;
-    flex-grow: 1;
     width: 100%;
-    height: 100%;
+    flex-grow: 0;
+    box-sizing: border-box;
+
+  }
+
+  #elements-list{
+    height: 175px;
+    flex-shrink: 0;
+  }
+
+  #sidebar-tree {
+    flex-grow: 1;
     overflow: hidden;
+    flex-shrink: 1;
   }
 }

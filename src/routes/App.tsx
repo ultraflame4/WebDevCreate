@@ -12,6 +12,11 @@ export default defineComponent((props, context) => {
                 <h2>WebDevCreate</h2>
             </header>
             <div id={"sidebar"}>
+                <p>Elements List</p>
+                <div id={"elements-list"}>
+
+                </div>
+                <p>Element Tree</p>
                 <ElementTree id={"sidebar-tree"} elements={document.body}/>
             </div>
         </div>

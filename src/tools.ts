@@ -47,3 +47,4 @@ export function getDomPath(el:Element) {
 export function getQuerySelector(el: Element) {
     return getDomPath(el).join(">")
 }
+

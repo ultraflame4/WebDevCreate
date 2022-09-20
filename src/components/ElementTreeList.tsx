@@ -9,6 +9,10 @@ interface props extends React.HTMLAttributes<HTMLUListElement> {
     maxrecursion?: number
 }
 
+function getHtmlChildrenArray(el: Element) {
+    let array = Array.prototype.slice.call(el.children)
+    return array
+}
 
 // todo remove max recursion and make the tree read the actual website being built
 const ElementTreeList = defineComponent<props>((props, context) => {
@@ -18,36 +22,38 @@ const ElementTreeList = defineComponent<props>((props, context) => {
         return (<></>)
     }
 
-    const [children,setChildren] = useState(new Array<Element>())
+    const [children, setChildren] = useState(new Array<Element>())
 
     useEffect(() => {
-        setChildren(Array.prototype.slice.call(props.elements.children))
+        setChildren(getHtmlChildrenArray(props.elements))
         const observer = new MutationObserver((mutations) => {
-            setChildren(Array.prototype.slice.call(props.elements.children))
+            setChildren(getHtmlChildrenArray(props.elements))
         })
         observer.observe(
             props.elements,
             {
-                childList:true,
-                attributes:false
+                childList: true,
+                attributes: false
             }
-            )
+        )
 
         return () => {
             observer.disconnect()
         }
-    },[props.elements])
+    }, [props.elements])
 
     return (
         <ul {...props}>
-            {children.map((value, index) => {
+            {
+                children.map((value, index) => {
 
-                return (
-                    <ElementTreeItem el={value} key={index}>
-                        <ElementTreeList elements={value} maxrecursion={max_recursion - 1}/>
-                    </ElementTreeItem>
-                )
-            })}
+                    return (
+                        <ElementTreeItem el={value} key={index}>
+                            <ElementTreeList elements={value} maxrecursion={max_recursion - 1}/>
+                        </ElementTreeItem>
+                    )
+                })
+            }
         </ul>
     )
 })

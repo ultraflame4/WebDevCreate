@@ -1,5 +1,6 @@
 import {defineComponent, ElementTreeContext, getDomPath, getQuerySelector, IElementTreeCtxObj} from "@/tools";
 import React, {useContext, useRef} from "react";
+import $ from "jquery";
 
 interface props extends React.HTMLAttributes<HTMLLIElement> {
     el: Element
@@ -27,7 +28,12 @@ export default defineComponent<props>((props) => {
     function OnDragStart(ev: React.DragEvent<HTMLLIElement>) {
         ev.stopPropagation()
 
-        ev.dataTransfer.setData("el",getQuerySelector(props.el))
+        let queryString=getQuerySelector(props.el)
+        if (queryString.length < 1) {
+            ev.preventDefault()
+
+        }
+        ev.dataTransfer.setData("el",queryString);
 
     }
 
@@ -39,7 +45,7 @@ export default defineComponent<props>((props) => {
         ev.stopPropagation()
         let data = ev.dataTransfer.getData("el")
         //@ts-ignore
-        console.log(`Moving`,document.querySelector(data),`to be a child of`,props.el)
+        console.log(`Moving`,$(data).first().val(),`to be a child of`,props.el)
     }
 
     return (

@@ -8,10 +8,12 @@ interface props extends React.HTMLAttributes<HTMLUListElement> {
     elements: Element,
     maxrecursion?: number
 }
+
+
 // todo remove max recursion and make the tree read the actual website being built
 const ElementTreeList = defineComponent<props>((props, context) => {
 
-    const max_recursion = props.maxrecursion ?? 5
+    const max_recursion = props.maxrecursion ?? 10
     if (max_recursion < 1) {
         return (<></>)
     }
@@ -20,6 +22,20 @@ const ElementTreeList = defineComponent<props>((props, context) => {
 
     useEffect(() => {
         setChildren(Array.prototype.slice.call(props.elements.children))
+        const observer = new MutationObserver((mutations) => {
+            setChildren(Array.prototype.slice.call(props.elements.children))
+        })
+        observer.observe(
+            props.elements,
+            {
+                childList:true,
+                attributes:false
+            }
+            )
+
+        return () => {
+            observer.disconnect()
+        }
     },[props.elements])
 
     return (

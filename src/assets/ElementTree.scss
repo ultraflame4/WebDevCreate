@@ -1,14 +1,15 @@
 .element-tree {
 
-  padding: 12px;
+  padding: 8px;
 
   list-style: none;
 
 
   ul {
     list-style: none;
-    padding-left: 16px;
+    padding-left: 12px;
     position: relative;
+
 
     &::before {
       content: "";
@@ -22,9 +23,12 @@
 
     }
   }
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
 
+  overflow: auto;
   .element-tree-item {
-    height: fit-content;
     min-height: 24px;
     font-size: 14px;
 
@@ -50,6 +54,8 @@
       border-radius: 6px;
       border: 1px solid transparent;
       transition: all ease 100ms;
+      height: 26px;
+      margin: 2px 0;
       a {
         display: flex;
         align-items: center;
@@ -58,6 +64,7 @@
 
       & > a > span {
         transition: all ease 200ms;
+
       }
 
       &.collapsed > a > span {

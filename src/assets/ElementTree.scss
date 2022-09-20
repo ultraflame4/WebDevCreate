@@ -1,0 +1,56 @@
+.element-tree {
+
+  padding: 0;
+
+  list-style: none;
+
+
+  ul {
+    list-style: none;
+    padding-left: 18px;
+  }
+
+  .element-tree-item {
+    height: fit-content;
+    min-height: 24px;
+    font-size: 14px;
+
+    .tagname {
+      font-weight: 500;
+      font-size: 0.8em;
+      color: grey;
+    }
+
+    & > p {
+
+      display: flex;
+      align-items: center;
+      -webkit-user-select: none;
+      user-select: none;
+
+      a {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      & > a > span {
+
+        transition: all ease 200ms;
+      }
+
+      &.collapsed > a > span {
+        transform: rotate(-90deg);
+      }
+    }
+
+    &:has(>p.collapsed) > ul {
+      display: none;
+
+    }
+
+  }
+
+
+}
+

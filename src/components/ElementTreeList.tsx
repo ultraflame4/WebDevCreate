@@ -25,7 +25,7 @@ const ElementTreeList = defineComponent<props>((props, context) => {
     return (
         <ul {...props}>
             {children.map((value, index) => {
-                console.log(value,index,max_recursion)
+
                 return (
                     <ElementTreeItem el={value} key={index}>
                         <ElementTreeList elements={value} maxrecursion={max_recursion - 1}/>

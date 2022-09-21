@@ -6,6 +6,8 @@ export function defineComponent<T>(component: React.FunctionComponent<React.Prop
 }
 
 
+
+
 /**
  * modified from https://gist.github.com/karlgroves/7544592
  * @param el
@@ -62,3 +64,10 @@ export function getRelativeCoords(el: Element, pageX: number, pageY: number): { 
     let _y = pageY - offset.top;
     return {x: _x, y: _y}
 }
+
+export interface IWebDevCreateAppBuilderCtxObj{
+    projectDomTree: Document
+}
+
+
+export const WebDevCreateAppBuilderContext = React.createContext<IWebDevCreateAppBuilderCtxObj|null>(null)

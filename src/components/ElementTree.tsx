@@ -29,11 +29,11 @@ export default defineComponent<props>((props, context) => {
     return (
         <div {...props}>
             <ElementTreeCtx.Provider value={CreateElementTreeCtxObj()}>
+
                 <ul className={"element-tree"}>
                     <ElementTreeItem el={props.root_element}>
                         <ElementTreeList elements={props.root_element}/>
                     </ElementTreeItem>
-
                 </ul>
 
             </ElementTreeCtx.Provider>

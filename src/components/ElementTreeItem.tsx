@@ -46,6 +46,7 @@ export default defineComponent<props>((props) => {
         ev.dataTransfer.setData("el", queryString);
 
     }
+    // todo stop drag drop when it item being dropped is its own child. !important
 
     function OnDragOver(ev: React.DragEvent<HTMLLIElement>) {
 

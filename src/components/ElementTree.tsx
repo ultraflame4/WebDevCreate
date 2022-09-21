@@ -1,19 +1,42 @@
-import {defineComponent, ElementTreeContext} from "@/tools";
+import {defineComponent} from "@/tools";
 
 import React, {useEffect} from "react";
 import ElementTreeList from "@/components/ElementTreeList";
+import ElementTreeItem from "@/components/ElementTreeItem";
+
 
 interface props extends React.HTMLAttributes<HTMLDivElement> {
-    elements: Element,
+    root_element: Element,
 }
+
+
+export interface IElementTreeCtxObj {
+    focusedElement: Element | null,
+    dragFocusElement: Element | null
+}
+
+function CreateElementTreeCtxObj(): IElementTreeCtxObj {
+    return {
+        dragFocusElement: null,
+        focusedElement: null
+    }
+}
+
+export const ElementTreeCtx = React.createContext<IElementTreeCtxObj>(CreateElementTreeCtxObj())
 
 export default defineComponent<props>((props, context) => {
 
     return (
         <div {...props}>
-            <ElementTreeContext.Provider value={{currentlySelectedElement:null}}>
-                <ElementTreeList elements={props.elements} className={"element-tree"}/>
-            </ElementTreeContext.Provider>
+            <ElementTreeCtx.Provider value={CreateElementTreeCtxObj()}>
+                <ul className={"element-tree"}>
+                    <ElementTreeItem el={props.root_element}>
+                        <ElementTreeList elements={props.root_element}/>
+                    </ElementTreeItem>
+
+                </ul>
+
+            </ElementTreeCtx.Provider>
         </div>
     )
 })

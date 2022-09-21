@@ -1,6 +1,8 @@
-import {defineComponent, ElementTreeContext, getDomPath, getQuerySelector, IElementTreeCtxObj} from "@/tools";
+import {defineComponent, getQuerySelector, getRelativeCoords} from "@/tools";
 import React, {useContext, useRef} from "react";
 import $ from "jquery";
+import {ElementTreeCtx} from "@/components/ElementTree";
+
 
 interface props extends React.HTMLAttributes<HTMLLIElement> {
     el: Element
@@ -8,53 +10,120 @@ interface props extends React.HTMLAttributes<HTMLLIElement> {
 
 export default defineComponent<props>((props) => {
     const itemRef = useRef<HTMLParagraphElement>(null)
-    const context = useContext(ElementTreeContext)
+    const rootRef = useRef<HTMLLIElement>(null)
+    const context = useContext(ElementTreeCtx)
+
+
     function toggleChildren() {
         itemRef.current?.classList.toggle("collapsed")
     }
 
     function focusThis() {
-        console.log(context)
-        if (context.currentlySelectedElement!==null) {
-            context.currentlySelectedElement.classList.remove("is-focused")
+        if (context.focusedElement !== null) {
+            context.focusedElement.classList.remove("is-focused")
         }
         if (itemRef.current === null) {
             return
         }
         itemRef.current.classList.add("is-focused");
-        context.currentlySelectedElement=itemRef.current
+        context.focusedElement = itemRef.current
+    }
+
+    function clearDragOverClass(el: Element | null) {
+        el?.classList.remove("drag-over-before");
+        el?.classList.remove("drag-over-after");
+        el?.classList.remove("drag-over-center");
     }
 
     function OnDragStart(ev: React.DragEvent<HTMLLIElement>) {
         ev.stopPropagation()
 
-        let queryString=getQuerySelector(props.el)
+        let queryString = getQuerySelector(props.el)
         if (queryString.length < 1) {
             ev.preventDefault()
 
         }
-        ev.dataTransfer.setData("el",queryString);
+        ev.dataTransfer.setData("el", queryString);
 
     }
 
-    function OnDragOver(ev:React.DragEvent<HTMLLIElement>){
+    function OnDragOver(ev: React.DragEvent<HTMLLIElement>) {
+
         ev.preventDefault()
+        ev.stopPropagation()
+
+        if (itemRef.current === null) {
+            console.error("itemRef is null!")
+            return
+        }
+
+
+        clearDragOverClass(context.dragFocusElement)
+
+        context.dragFocusElement = itemRef.current;
+        ev.dataTransfer.dropEffect = "move"
+        if (rootRef.current === null) {
+            return;
+        }
+        let jEl = $(rootRef.current);
+        const {y} = getRelativeCoords(rootRef.current, ev.pageX, ev.pageY)
+
+        if (y < 10) { // insert sibling before
+            itemRef.current.classList.add("drag-over-before");
+
+        }
+        //@ts-ignore
+        else if (y > jEl.height() - 10) { // insert after
+            itemRef.current.classList.add("drag-over-after");
+        } else { // add as child
+            itemRef.current.classList.add("drag-over-center");
+        }
     }
 
-    function OnDrop(ev:React.DragEvent<HTMLLIElement>){
+    function OnDragLeave(ev: React.DragEvent<HTMLLIElement>) {
+        clearDragOverClass(context.dragFocusElement)
+        // context.dragFocusElement = null;
+    }
+
+    function OnDrop(ev: React.DragEvent<HTMLLIElement>) {
         ev.stopPropagation()
+
+
         let data = ev.dataTransfer.getData("el")
-        //@ts-ignore
-        console.log(`Moving`,$(data).first().val(),`to be a child of`,props.el)
+        let el = $(data).get()[0]
+        console.log(itemRef.current, rootRef.current)
+        if (itemRef.current && rootRef.current) {
+            // The element that is to be inserted (and moved) is "el"
+            if (itemRef.current.classList.contains("drag-over-before")){
+                // insert as sibling before
+                //todo
+            }
+            else if (itemRef.current.classList.contains("drag-over-center")){
+                // add as child
+                //todo
+
+            }else if (itemRef.current.classList.contains("drag-over-after")){
+                // add as sibling after
+                //todo
+            }
+
+
+        } else {
+            console.error("itemRef or rootRef is somehow null. Goddammit react!")
+        }
+
+        clearDragOverClass(context.dragFocusElement)
+        context.dragFocusElement = null;
     }
 
     return (
-        <li {...props} className={"element-tree-item"} draggable={true} onDragOver={OnDragOver} onDragStart={OnDragStart} onDrop={OnDrop}>
+        <li {...props} className={"element-tree-item"} draggable={true} onDragOver={OnDragOver}
+            onDragStart={OnDragStart} onDrop={OnDrop} onDragLeave={OnDragLeave} ref={rootRef}>
             <p ref={itemRef} onClick={focusThis}>
                 {
                     props.el.childElementCount > 0 ?
                         <a onClick={toggleChildren}><span
-                            className={"material-symbols-outlined"}>arrow_drop_down</span></a> :
+                            className={"material-symbols-outlined"}>expand_more</span></a> :
                         <span style={{width: "12px"}}></span> // spacer
                 }
 

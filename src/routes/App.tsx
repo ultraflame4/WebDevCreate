@@ -17,7 +17,7 @@ export default defineComponent((props, context) => {
 
                 </div>
                 <p>Element Tree</p>
-                <ElementTree id={"sidebar-tree"} elements={document.body}/>
+                <ElementTree id={"sidebar-tree"} root_element={document.body}/>
             </div>
         </div>
     )

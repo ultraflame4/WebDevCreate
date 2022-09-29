@@ -1,4 +1,4 @@
-import {defineComponent} from "@/tools";
+import {defineComponent} from "@/core";
 
 import React, {useEffect} from "react";
 import ElementTreeList from "@/components/ElementTreeList";

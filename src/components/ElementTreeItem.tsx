@@ -1,4 +1,4 @@
-import {defineComponent, getQuerySelector, getRelativeCoords} from "@/tools";
+import {defineComponent, getQuerySelector, getRelativeCoords} from "@/core";
 import React, {useContext, useRef} from "react";
 import $ from "jquery";
 import {ElementTreeCtx} from "@/components/ElementTree";

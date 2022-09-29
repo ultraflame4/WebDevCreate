@@ -1,10 +1,12 @@
-import {defineComponent, IWebDevCreateAppBuilderCtxObj, WebDevCreateAppBuilderContext} from "@/tools";
+import {defineComponent, IWebDevCreateAppBuilderCtxObj, WebDevCreateAppBuilderContext} from "@/core";
 import "@/assets/App.scss"
 import ElementTree from "@/components/ElementTree";
 import ProjectPreviewPanel from "@/components/ProjectPreviewPanel";
 import templateUrl from "@/assets/template.html"
 
 import $ from "jquery"
+import ElementComponentsList from "@/components/ElementComponentsList";
+import htmlElements from "@/htmlElements.json";
 
 export default defineComponent((props, context) => {
     let templateString = $.ajax({
@@ -14,8 +16,10 @@ export default defineComponent((props, context) => {
     }).responseText
 
     const ctxObj:IWebDevCreateAppBuilderCtxObj = {
-        projectDomTree: new DOMParser().parseFromString(templateString,"text/html")
+        projectDomTree: new DOMParser().parseFromString(templateString,"text/html"),
+        elementComponentList:htmlElements
     }
+
 
     return (
         <WebDevCreateAppBuilderContext.Provider value={ctxObj}>
@@ -25,8 +29,8 @@ export default defineComponent((props, context) => {
                 </header>
                 <div id={"sidebar"}>
                     <p>Elements List</p>
-                    <div id={"elements-list"}>
-
+                    <div id={"components-list"}>
+                        <ElementComponentsList elementComponents={ctxObj.elementComponentList}/>
                     </div>
                     <p>Html Tree</p>
                     <ElementTree id={"sidebar-tree"} root_element={ctxObj.projectDomTree.body}/>

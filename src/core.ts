@@ -65,9 +65,15 @@ export function getRelativeCoords(el: Element, pageX: number, pageY: number): { 
     return {x: _x, y: _y}
 }
 
-export interface IWebDevCreateAppBuilderCtxObj{
-    projectDomTree: Document
+export interface ElementComponent {
+    name:string,
+    description?:string,
+    htmlTagName:string
 }
 
+export interface IWebDevCreateAppBuilderCtxObj{
+    projectDomTree: Document,
+    elementComponentList : ElementComponent[]
+}
 
 export const WebDevCreateAppBuilderContext = React.createContext<IWebDevCreateAppBuilderCtxObj|null>(null)

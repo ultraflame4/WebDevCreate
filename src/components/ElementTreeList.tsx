@@ -1,4 +1,4 @@
-import {defineComponent} from "@/tools";
+import {defineComponent} from "@/core";
 import React, {CSSProperties, useEffect, useState} from "react";
 import "@/assets/ElementTree.scss"
 import ElementTreeItem from "@/components/ElementTreeItem";

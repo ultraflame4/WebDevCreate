@@ -99,36 +99,56 @@ export default defineComponent<props>((props) => {
 
 
         let data = ev.dataTransfer.getData("el")
+        let newEl_tagName = ev.dataTransfer.getData("tagName")
+        let newEl_attrs = ev.dataTransfer.getData("attrs")
+
+        let el;
         if (data) {
             // el represents the element in project iframe
-            let el = $(appContext.projectDomTree).find(data).get()[0]
-            let currentEl = props.el
-
-            if (itemRef.current && rootRef.current) {
-                try {
-                    // The element that is to be inserted (and moved) is "el"
-                    if (itemRef.current.classList.contains("drag-over-before")) {
-                        // insert as sibling before
-                        currentEl.insertAdjacentElement("beforebegin", el)
-                    } else if (itemRef.current.classList.contains("drag-over-center")) {
-                        // add as child
-
-                        currentEl.appendChild(el);
-
-
-                    } else if (itemRef.current.classList.contains("drag-over-after")) {
-                        // add as sibling after
-                        currentEl.insertAdjacentElement("afterend", el)
-                    }
-                } catch (e: DOMException | any) {
-                    console.warn("failed to move element", e.message);
+            el = $(appContext.projectDomTree).find(data).get()[0]
+        }
+        else if (newEl_tagName){
+            el = document.createElement(newEl_tagName);
+            if (newEl_attrs) {
+                let attrs:{[ name:string ]:string} = JSON.parse(newEl_attrs)
+                for (let [attrName, attrValue] of Object.entries(attrs)) {
+                    el.setAttribute(attrName,attrValue)
                 }
-                //update state
-                setHasChild(currentEl.childElementCount > 0)
-
-            } else {
-                console.error("itemRef or rootRef is somehow null. Goddammit react!")
             }
+
+        }
+        else{
+            console.error("Error At OnDrop callback at ElementTreeItem.tsx Program is stumped :/")
+            return
+        }
+
+
+        let currentEl = props.el
+
+        if (itemRef.current && rootRef.current) {
+            try {
+                // The element that is to be inserted (and moved) is "el"
+                if (itemRef.current.classList.contains("drag-over-before")) {
+                    // insert as sibling before
+                    currentEl.insertAdjacentElement("beforebegin", el)
+                } else if (itemRef.current.classList.contains("drag-over-center")) {
+                    // add as child
+
+                    currentEl.appendChild(el);
+
+
+                } else if (itemRef.current.classList.contains("drag-over-after")) {
+                    // add as sibling after
+                    currentEl.insertAdjacentElement("afterend", el)
+                }
+            } catch (e: DOMException | any) {
+                console.warn("failed to move element", e.message);
+            }
+            //update state
+            setHasChild(currentEl.childElementCount > 0)
+
+        } else {
+            console.error("itemRef or rootRef is somehow null. Goddammit react!")
         }
 
 

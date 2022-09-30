@@ -19,7 +19,7 @@ const ElementComponentItem = defineComponent<itemProps>((props, context) => {
         }
 
         ev.dataTransfer.setData("tagName",props.name);
-        if (props) {
+        if (props.attrs) {
             ev.dataTransfer.setData("attrs",JSON.stringify(props.attrs))
         }
 

@@ -1,5 +1,5 @@
 import {defineComponent, getQuerySelector, getRelativeCoords, WebDevCreateAppBuilderContext} from "@/core";
-import React, {useContext, useRef} from "react";
+import React, {useContext, useRef, useState} from "react";
 import $ from "jquery";
 import {ElementTreeCtx} from "@/components/ElementTree";
 
@@ -13,6 +13,7 @@ export default defineComponent<props>((props) => {
     const rootRef = useRef<HTMLLIElement>(null)
     const context = useContext(ElementTreeCtx)
     const appContext = useContext(WebDevCreateAppBuilderContext)
+    const [hasChild, setHasChild] = useState<boolean>(props.el.childElementCount > 0)
 
     function toggleChildren() {
         itemRef.current?.classList.toggle("collapsed")
@@ -47,6 +48,7 @@ export default defineComponent<props>((props) => {
         ev.dataTransfer.setData("el", queryString);
 
     }
+
     // todo stop drag drop when it item being dropped is its own child. !important
 
     function OnDragOver(ev: React.DragEvent<HTMLLIElement>) {
@@ -97,32 +99,36 @@ export default defineComponent<props>((props) => {
 
 
         let data = ev.dataTransfer.getData("el")
-        // el represents the element in project iframe
-        let el = $(appContext.projectDomTree).find(data).get()[0]
-        let currentEl = props.el
+        if (data) {
+            // el represents the element in project iframe
+            let el = $(appContext.projectDomTree).find(data).get()[0]
+            let currentEl = props.el
 
-        if (itemRef.current && rootRef.current) {
+            if (itemRef.current && rootRef.current) {
 
 
-            console.log(el,currentEl)
-            // The element that is to be inserted (and moved) is "el"
-            if (itemRef.current.classList.contains("drag-over-before")){
-                // insert as sibling before
-                currentEl.insertAdjacentElement("beforebegin",el)
+                console.log(el, currentEl)
+                // The element that is to be inserted (and moved) is "el"
+                if (itemRef.current.classList.contains("drag-over-before")) {
+                    // insert as sibling before
+                    currentEl.insertAdjacentElement("beforebegin", el)
+                } else if (itemRef.current.classList.contains("drag-over-center")) {
+                    // add as child
+                    currentEl.appendChild(el)
+
+                } else if (itemRef.current.classList.contains("drag-over-after")) {
+                    // add as sibling after
+                    currentEl.insertAdjacentElement("afterend", el)
+                }
+
+                //update state
+                setHasChild(currentEl.childElementCount > 0)
+
+            } else {
+                console.error("itemRef or rootRef is somehow null. Goddammit react!")
             }
-            else if (itemRef.current.classList.contains("drag-over-center")){
-                // add as child
-                currentEl.appendChild(el)
-
-            }else if (itemRef.current.classList.contains("drag-over-after")){
-                // add as sibling after
-                currentEl.insertAdjacentElement("afterend", el)
-            }
-
-
-        } else {
-            console.error("itemRef or rootRef is somehow null. Goddammit react!")
         }
+
 
         clearDragOverClass(context.dragFocusElement)
         context.dragFocusElement = null;
@@ -134,7 +140,7 @@ export default defineComponent<props>((props) => {
             onDragStart={OnDragStart} onDrop={OnDrop} onDragLeave={OnDragLeave} ref={rootRef}>
             <p ref={itemRef} onClick={focusThis}>
                 {
-                    props.el.childElementCount > 0 ?
+                    hasChild ?
                         <a onClick={toggleChildren}><span
                             className={"material-symbols-outlined"}>expand_more</span></a> :
                         <span style={{width: "12px"}}></span> // spacer

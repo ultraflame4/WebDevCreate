@@ -105,20 +105,24 @@ export default defineComponent<props>((props) => {
             let currentEl = props.el
 
             if (itemRef.current && rootRef.current) {
+                try {
+                    // The element that is to be inserted (and moved) is "el"
+                    if (itemRef.current.classList.contains("drag-over-before")) {
+                        // insert as sibling before
+                        currentEl.insertAdjacentElement("beforebegin", el)
+                    } else if (itemRef.current.classList.contains("drag-over-center")) {
+                        // add as child
 
-                // The element that is to be inserted (and moved) is "el"
-                if (itemRef.current.classList.contains("drag-over-before")) {
-                    // insert as sibling before
-                    currentEl.insertAdjacentElement("beforebegin", el)
-                } else if (itemRef.current.classList.contains("drag-over-center")) {
-                    // add as child
-                    currentEl.appendChild(el)
+                        currentEl.appendChild(el);
 
-                } else if (itemRef.current.classList.contains("drag-over-after")) {
-                    // add as sibling after
-                    currentEl.insertAdjacentElement("afterend", el)
+
+                    } else if (itemRef.current.classList.contains("drag-over-after")) {
+                        // add as sibling after
+                        currentEl.insertAdjacentElement("afterend", el)
+                    }
+                } catch (e: DOMException | any) {
+                    console.warn("failed to move element", e.message);
                 }
-
                 //update state
                 setHasChild(currentEl.childElementCount > 0)
 

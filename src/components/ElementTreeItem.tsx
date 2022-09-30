@@ -101,7 +101,6 @@ export default defineComponent<props>((props) => {
         let el = $(appContext.projectDomTree).find(data).get()[0]
         let currentEl = props.el
 
-        console.log(itemRef.current, rootRef.current)
         if (itemRef.current && rootRef.current) {
 
 
@@ -113,11 +112,11 @@ export default defineComponent<props>((props) => {
             }
             else if (itemRef.current.classList.contains("drag-over-center")){
                 // add as child
-                //todo
+                currentEl.appendChild(el)
 
             }else if (itemRef.current.classList.contains("drag-over-after")){
                 // add as sibling after
-                //todo
+                currentEl.insertAdjacentElement("afterend", el)
             }
 
 

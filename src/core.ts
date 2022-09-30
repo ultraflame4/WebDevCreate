@@ -71,8 +71,9 @@ export interface ElementComponent {
 }
 
 export interface IWebDevCreateAppBuilderCtxObj{
-    projectDomTree: Document,
+    projectDomTree: Document
     elementComponentList : ElementComponent[]
+    appVersion: string
 }
 
 export const WebDevCreateAppBuilderContext = React.createContext<IWebDevCreateAppBuilderCtxObj|null>(null)

@@ -18,7 +18,8 @@ export default defineComponent((props, context) => {
 
     const ctxObj:IWebDevCreateAppBuilderCtxObj = {
         projectDomTree: new DOMParser().parseFromString(templateString,"text/html"),
-        elementComponentList:htmlElements
+        elementComponentList:htmlElements,
+        appVersion:APP_VERSION
     }
 
 

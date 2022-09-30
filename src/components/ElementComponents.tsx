@@ -1,15 +1,33 @@
 import {defineComponent, ElementComponent} from "@/core";
 import "@/assets/ElementComponents.scss"
+import DragStartEvent = JQuery.DragStartEvent;
+import React from "react";
 
 interface itemProps{
     name: string,
     desc: string,
     tagName: string
+    attrs?: {[attrName:string] : string}
 }
 
 const ElementComponentItem = defineComponent<itemProps>((props, context) => {
+
+    function dragStart(ev: React.DragEvent<HTMLLIElement>) {
+        if (ev.dataTransfer == null) {
+            console.error("ElementComponents: Drag start data transfer is null")
+            return
+        }
+
+        ev.dataTransfer.setData("tagName",props.name);
+        if (props) {
+            ev.dataTransfer.setData("attrs",JSON.stringify(props.attrs))
+        }
+
+
+    }
+
     return (
-        <li className={"el-comp-item"} draggable={true}>
+        <li className={"el-comp-item"} draggable={true} onDragStart={dragStart}>
             <p>
                 {props.name}
             </p>

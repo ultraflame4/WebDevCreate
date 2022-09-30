@@ -28,7 +28,7 @@ export default defineComponent((props, context) => {
                     <h2>WebDevCreate</h2>
                 </header>
                 <div id={"sidebar"}>
-                    <p>Elements List</p>
+                    <p>Elements & Components</p>
                     <div id={"components-list"}>
                         <ElementComponentsList elementComponents={ctxObj.elementComponentList}/>
                     </div>

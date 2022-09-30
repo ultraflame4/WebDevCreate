@@ -17,6 +17,28 @@ export default defineComponent((props, context) => {
         )
     }
 
+    useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            if (iframeRef.current===null){
+                console.error("Cannot get project preview panel iframe!")
+                return
+            }
+            iframeRef.current.srcdoc=appCtx.projectDomTree.documentElement.outerHTML
+        })
+
+        observer.observe(
+            appCtx.projectDomTree.documentElement,
+            {
+                childList: true,
+                attributes: true,
+                subtree:true
+            }
+        )
+
+        return () => {
+            observer.disconnect()
+        }
+    })
     return (
         <div className={"project-preview-panel"} ref={rootRef}>
             <iframe srcDoc={appCtx.projectDomTree.documentElement.outerHTML} ref={iframeRef}></iframe>

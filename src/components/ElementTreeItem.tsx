@@ -1,4 +1,4 @@
-import {defineComponent, getQuerySelector, getRelativeCoords} from "@/core";
+import {defineComponent, getQuerySelector, getRelativeCoords, WebDevCreateAppBuilderContext} from "@/core";
 import React, {useContext, useRef} from "react";
 import $ from "jquery";
 import {ElementTreeCtx} from "@/components/ElementTree";
@@ -12,7 +12,7 @@ export default defineComponent<props>((props) => {
     const itemRef = useRef<HTMLParagraphElement>(null)
     const rootRef = useRef<HTMLLIElement>(null)
     const context = useContext(ElementTreeCtx)
-
+    const appContext = useContext(WebDevCreateAppBuilderContext)
 
     function toggleChildren() {
         itemRef.current?.classList.toggle("collapsed")
@@ -33,6 +33,7 @@ export default defineComponent<props>((props) => {
         el?.classList.remove("drag-over-before");
         el?.classList.remove("drag-over-after");
         el?.classList.remove("drag-over-center");
+
     }
 
     function OnDragStart(ev: React.DragEvent<HTMLLIElement>) {
@@ -89,15 +90,26 @@ export default defineComponent<props>((props) => {
     function OnDrop(ev: React.DragEvent<HTMLLIElement>) {
         ev.stopPropagation()
 
+        if (appContext === null) {
+            console.error("Fatal Error, App context Is Null!")
+            return (<></>)
+        }
+
 
         let data = ev.dataTransfer.getData("el")
-        let el = $(data).get()[0]
+        // el represents the element in project iframe
+        let el = $(appContext.projectDomTree).find(data).get()[0]
+        let currentEl = props.el
+
         console.log(itemRef.current, rootRef.current)
         if (itemRef.current && rootRef.current) {
+
+
+            console.log(el,currentEl)
             // The element that is to be inserted (and moved) is "el"
             if (itemRef.current.classList.contains("drag-over-before")){
                 // insert as sibling before
-                //todo
+                currentEl.insertAdjacentElement("beforebegin",el)
             }
             else if (itemRef.current.classList.contains("drag-over-center")){
                 // add as child
@@ -115,6 +127,7 @@ export default defineComponent<props>((props) => {
 
         clearDragOverClass(context.dragFocusElement)
         context.dragFocusElement = null;
+
     }
 
     return (

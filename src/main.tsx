@@ -17,7 +17,6 @@ const router = createHashRouter([
 
 if (import.meta.env.PROD) {
     if (APP_VERSION.includes("dev")) {
-        console.log("test")
         alert("WARNING: This website version very much being built! Many things will not work! Not all features will be available! DO NOT USE FOR SERIOUS APPLICATIONS")
     }
     else if (APP_VERSION.includes("alpha")){

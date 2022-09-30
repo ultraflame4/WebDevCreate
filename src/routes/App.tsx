@@ -2,7 +2,7 @@ import {defineComponent, IWebDevCreateAppBuilderCtxObj, WebDevCreateAppBuilderCo
 import "@/assets/App.scss"
 import ElementTree from "@/components/ElementTree";
 import ProjectPreviewPanel from "@/components/ProjectPreviewPanel";
-import templateUrl from "@/assets/template.html"
+import templateUrl from "@/assets/template.html?url"
 
 import $ from "jquery"
 import ElementComponentsList from "@/components/ElementComponents";

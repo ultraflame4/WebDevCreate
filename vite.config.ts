@@ -7,11 +7,13 @@ export default defineConfig({
     plugins: [react()],
     resolve: {
         alias: {
-            "@": `${path.resolve(__dirname, 'src')}/`
+            "@": path.resolve(__dirname, 'src')
         }
     },
     define: {
         'APP_VERSION': JSON.stringify(process.env.npm_package_version),
     },
-    assetsInclude: ["**/*.html"]
+    assetsInclude: ["src/**/*.html"],
+    base: "",
+
 })

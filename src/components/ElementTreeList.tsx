@@ -6,7 +6,6 @@ import ElementTreeItem from "@/components/ElementTreeItem";
 
 interface props extends React.HTMLAttributes<HTMLUListElement> {
     elements: Element,
-    maxrecursion?: number
 }
 
 function getHtmlChildrenArray(el: Element) {
@@ -14,13 +13,8 @@ function getHtmlChildrenArray(el: Element) {
     return array
 }
 
-// todo remove max recursion and make the tree read the actual website being built
 const ElementTreeList = defineComponent<props>((props, context) => {
 
-    const max_recursion = props.maxrecursion ?? 10
-    if (max_recursion < 1) {
-        return (<></>)
-    }
 
     const [children, setChildren] = useState(new Array<Element>())
 
@@ -49,7 +43,7 @@ const ElementTreeList = defineComponent<props>((props, context) => {
 
                     return (
                         <ElementTreeItem el={value} key={index}>
-                            <ElementTreeList elements={value} maxrecursion={max_recursion - 1}/>
+                            <ElementTreeList elements={value}/>
                         </ElementTreeItem>
                     )
                 })

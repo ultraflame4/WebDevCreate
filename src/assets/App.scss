@@ -1,9 +1,7 @@
-$bg: whitesmoke;
-$line-color: #000;
-
+@use "./variables" as vars;
 
 .default-bg {
-  background: $bg;
+  background: vars.$bg;
 }
 
 #app {
@@ -21,7 +19,7 @@ $line-color: #000;
 
 #app-header {
   height: 100%;
-  border-bottom: 1px solid $line-color;
+  border-bottom: 1px solid vars.$line-color;
   grid-column: 1 / -1;
   grid-row: 1 / 2;
   display: flex;
@@ -46,12 +44,12 @@ $line-color: #000;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  padding: 0.8rem;
+  padding: 0.5rem;
 
   grid-column: 1 / 2;
   grid-row: 2 / -2;
 
-  border-right: 1px solid $line-color;
+  border-right: 1px solid vars.$line-color;
   box-shadow: 2px 0 3px #ccc;
   flex-direction: column;
   gap: 0.4rem;
@@ -66,7 +64,7 @@ $line-color: #000;
 
   >div{
     border-radius: 0.5em;
-    border: 1px solid $line-color;
+    border: 1px solid vars.$line-color;
     width: 100%;
     flex-grow: 0;
     box-sizing: border-box;

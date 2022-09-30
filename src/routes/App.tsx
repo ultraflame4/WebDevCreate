@@ -5,7 +5,7 @@ import ProjectPreviewPanel from "@/components/ProjectPreviewPanel";
 import templateUrl from "@/assets/template.html"
 
 import $ from "jquery"
-import ElementComponentsList from "@/components/ElementComponentsList";
+import ElementComponentsList from "@/components/ElementComponents";
 import htmlElements from "@/htmlElements.json";
 
 export default defineComponent((props, context) => {

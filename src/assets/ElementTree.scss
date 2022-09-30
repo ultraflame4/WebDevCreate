@@ -1,6 +1,8 @@
+@use "./variables" as vars;
+
 .element-tree {
 
-  padding: 8px;
+  padding: 4px;
 
   list-style: none;
 
@@ -32,7 +34,7 @@
   .element-tree-item {
     min-height: 24px;
     font-size: 14px;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     border-radius: 8px;
 
     .tagname {
@@ -102,14 +104,14 @@
     }
 
     &:has(>p.drag-over-center){
-      border-color: magenta;
+      border-color: vars.$line-color-highlight;
     }
     &:has(>p.drag-over-before){
-      border-top-color: magenta;
+      border-top-color: vars.$line-color-highlight;
       border-radius: 0;
     }
     &:has(>p.drag-over-after){
-      border-bottom-color: magenta;
+      border-bottom-color: vars.$line-color-highlight;
       border-radius: 0;
     }
 

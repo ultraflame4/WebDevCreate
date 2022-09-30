@@ -1,68 +1,23 @@
 [
   {
-    "name": "html",
-    "htmlTagName": "<html>",
-    "description": "The <html> HTML element represents the root (top-level element) of an HTML document, so it is also referred to as the root element. All other elements must be descendants of this element."
+    "name": "div",
+    "htmlTagName": "<div>",
+    "description": "The <div> HTML element is the generic container for flow content. It has no effect on the content or layout until styled in some way using CSS (e.g. styling is directly applied to it, or some kind of layout model like Flexbox is applied to its parent element)."
   },
   {
-    "name": "base",
-    "htmlTagName": "<base>",
-    "description": "The <base> HTML element specifies the base URL to use for all relative URLs in a document. There can be only one <base> element in a document."
+    "name": "p",
+    "htmlTagName": "<p>",
+    "description": "The <p> HTML element represents a paragraph. Paragraphs are usually represented in visual media as blocks of text separated from adjacent blocks by blank lines and/or first-line indentation, but HTML paragraphs can be any structural grouping of related content, such as images or form fields."
   },
   {
-    "name": "head",
-    "htmlTagName": "<head>",
-    "description": "The <head> HTML element contains machine-readable information (metadata) about the document, like its title, scripts, and style sheets."
-  },
-  {
-    "name": "link",
-    "htmlTagName": "<link>",
-    "description": "The <link> HTML element specifies relationships between the current document and an external resource. This element is most commonly used to link to CSS, but is also used to establish site icons (both \"favicon\" style icons and icons for the home screen and apps on mobile devices) among other things."
-  },
-  {
-    "name": "meta",
-    "htmlTagName": "<meta>",
-    "description": "The <meta> HTML element represents Metadata that cannot be represented by other HTML meta-related elements, like base, link, script, style or title."
+    "name": "span",
+    "htmlTagName": "<span>",
+    "description": "The <span> HTML element is a generic inline container for phrasing content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element is appropriate. <span> is very much like a div element, but div is a block-level element whereas a <span> is an inline element."
   },
   {
     "name": "style",
     "htmlTagName": "<style>",
     "description": "The <style> HTML element contains style information for a document, or part of a document. It contains CSS, which is applied to the contents of the document containing the <style> element."
-  },
-  {
-    "name": "title",
-    "htmlTagName": "<title>",
-    "description": "The <title> HTML element defines the document's title that is shown in a Browser's title bar or a page's tab. It only contains text; tags within the element are ignored."
-  },
-  {
-    "name": "base",
-    "htmlTagName": "<base>",
-    "description": "The <base> HTML element specifies the base URL to use for all relative URLs in a document. There can be only one <base> element in a document."
-  },
-  {
-    "name": "head",
-    "htmlTagName": "<head>",
-    "description": "The <head> HTML element contains machine-readable information (metadata) about the document, like its title, scripts, and style sheets."
-  },
-  {
-    "name": "link",
-    "htmlTagName": "<link>",
-    "description": "The <link> HTML element specifies relationships between the current document and an external resource. This element is most commonly used to link to CSS, but is also used to establish site icons (both \"favicon\" style icons and icons for the home screen and apps on mobile devices) among other things."
-  },
-  {
-    "name": "meta",
-    "htmlTagName": "<meta>",
-    "description": "The <meta> HTML element represents Metadata that cannot be represented by other HTML meta-related elements, like base, link, script, style or title."
-  },
-  {
-    "name": "style",
-    "htmlTagName": "<style>",
-    "description": "The <style> HTML element contains style information for a document, or part of a document. It contains CSS, which is applied to the contents of the document containing the <style> element."
-  },
-  {
-    "name": "title",
-    "htmlTagName": "<title>",
-    "description": "The <title> HTML element defines the document's title that is shown in a Browser's title bar or a page's tab. It only contains text; tags within the element are ignored."
   },
   {
     "name": "blockquote",
@@ -73,11 +28,6 @@
     "name": "dd",
     "htmlTagName": "<dd>",
     "description": "The <dd> HTML element provides the description, definition, or value for the preceding term (dt) in a description list (dl)."
-  },
-  {
-    "name": "div",
-    "htmlTagName": "<div>",
-    "description": "The <div> HTML element is the generic container for flow content. It has no effect on the content or layout until styled in some way using CSS (e.g. styling is directly applied to it, or some kind of layout model like Flexbox is applied to its parent element)."
   },
   {
     "name": "dl",
@@ -119,11 +69,7 @@
     "htmlTagName": "<ol>",
     "description": "The <ol> HTML element represents an ordered list of items — typically rendered as a numbered list."
   },
-  {
-    "name": "p",
-    "htmlTagName": "<p>",
-    "description": "The <p> HTML element represents a paragraph. Paragraphs are usually represented in visual media as blocks of text separated from adjacent blocks by blank lines and/or first-line indentation, but HTML paragraphs can be any structural grouping of related content, such as images or form fields."
-  },
+
   {
     "name": "pre",
     "htmlTagName": "<pre>",
@@ -239,11 +185,7 @@
     "htmlTagName": "<small>",
     "description": "The <small> HTML element represents side-comments and small print, like copyright and legal text, independent of its styled presentation. By default, it renders text within it one font-size smaller, such as from small to x-small."
   },
-  {
-    "name": "span",
-    "htmlTagName": "<span>",
-    "description": "The <span> HTML element is a generic inline container for phrasing content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element is appropriate. <span> is very much like a div element, but div is a block-level element whereas a <span> is an inline element."
-  },
+
   {
     "name": "strong",
     "htmlTagName": "<strong>",

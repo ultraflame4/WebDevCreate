@@ -6,7 +6,6 @@ import React from "react";
 interface itemProps{
     name: string,
     desc: string,
-    tagName: string
     attrs?: {[attrName:string] : string}
 }
 
@@ -49,7 +48,6 @@ export default defineComponent<listProps>((props, context) => {
                             key={index}
                             name={value.name}
                             desc={value.description??""}
-                            tagName={value.htmlTagName}
                         />
                     )
                 })

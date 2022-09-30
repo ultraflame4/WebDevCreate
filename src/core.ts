@@ -68,7 +68,6 @@ export function getRelativeCoords(el: Element, pageX: number, pageY: number): { 
 export interface ElementComponent {
     name:string,
     description?:string,
-    htmlTagName:string
 }
 
 export interface IWebDevCreateAppBuilderCtxObj{

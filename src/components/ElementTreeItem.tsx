@@ -106,8 +106,6 @@ export default defineComponent<props>((props) => {
 
             if (itemRef.current && rootRef.current) {
 
-
-                console.log(el, currentEl)
                 // The element that is to be inserted (and moved) is "el"
                 if (itemRef.current.classList.contains("drag-over-before")) {
                     // insert as sibling before

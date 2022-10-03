@@ -13,7 +13,9 @@ export default defineComponent<props>((props) => {
     const rootRef = useRef<HTMLLIElement>(null)
     const context = useContext(ElementTreeCtx)
     const appContext = useContext(WebDevCreateAppBuilderContext)
-    const [hasChild, setHasChild] = useState<boolean>(props.el.childElementCount > 0)
+    // not using useState here because setState doesnt work for some reason
+    let hasChild = props.el.childElementCount > 0
+
 
     function toggleChildren() {
         itemRef.current?.classList.toggle("collapsed")
@@ -144,13 +146,13 @@ export default defineComponent<props>((props) => {
             } catch (e: DOMException | any) {
                 console.warn("failed to move element", e.message);
             }
-            //update state
-            setHasChild(currentEl.childElementCount > 0)
+            // update state
+            hasChild = currentEl.childElementCount > 0
+
 
         } else {
             console.error("itemRef or rootRef is somehow null. Goddammit react!")
         }
-
 
         clearDragOverClass(context.dragFocusElement)
         context.dragFocusElement = null;

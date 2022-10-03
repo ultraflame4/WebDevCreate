@@ -26,17 +26,20 @@ export const TitleSearchBar = defineComponent<props>((props, context) => {
     }
 
     function OnTextChange(e: React.ChangeEvent<HTMLInputElement>) {
-        ctx.query.value=e.target.value
+        ctx.query.value = e.target.value
     }
 
     return (
         <div {...props} className={"title-searchbar " + props.className}>
             <p>{props.title}</p>
             <div className={"searchbar"}>
-                <input className={"searchbar-input"} ref={searchboxRef} onChange={OnTextChange}/>
+                <input className={"searchbar-input"} placeholder={"Search ..."} type={"search"}
+                       ref={searchboxRef} onChange={OnTextChange}/>
 
-                <span id={"icon-close"} className="material-symbols-outlined searchbar-icon" onClick={toggleSearchbox}>close</span>
-                <span id={"icon-search"} className="material-symbols-outlined searchbar-icon" onClick={toggleSearchbox}>search</span>
+                <span id={"icon-close"} className="material-symbols-outlined searchbar-icon"
+                      onClick={toggleSearchbox}>close</span>
+                <span id={"icon-search"} className="material-symbols-outlined searchbar-icon"
+                      onClick={toggleSearchbox}>search</span>
 
             </div>
         </div>

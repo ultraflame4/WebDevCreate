@@ -51,6 +51,11 @@
 
 .searchbar-input {
 
+  &::placeholder{
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.3);
+  }
+
   &:not(.opened) {
     width: 0;
     opacity: 0;
@@ -74,7 +79,7 @@
   border: none;
   outline: 1px solid black;
 
-  width: 150px;
+  width: 200px;
   border-radius: 1em;
   animation: expand-open ease 500ms;
 
@@ -98,14 +103,14 @@
     opacity: 0;
   }
   to {
-    width: 150px;
+    width: 200px;
     opacity: 1;
   }
 }
 
 @keyframes expand-close {
   from {
-    width: 150px;
+    width: 200px;
     padding: 2px 0;
     opacity: 1;
   }

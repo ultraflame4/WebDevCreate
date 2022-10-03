@@ -54,22 +54,6 @@
   flex-direction: column;
   gap: 0.4rem;
 
-  >p {
-    margin: 0.8em 0 0 0.4em;
-    font-weight: 600;
-    letter-spacing: 1px;
-    font-size: 0.9em;
-    flex-shrink: 0;
-  }
-
-  >div{
-    border-radius: 0.5em;
-    border: 1px solid vars.$line-color;
-    width: 100%;
-    flex-grow: 0;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
 
   #components-list{
     height: 175px;
@@ -82,6 +66,25 @@
     flex-shrink: 1;
   }
 }
+
+.sidebar-title {
+  margin: 0.8em 0 0 0.4em;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-size: 0.9em;
+  flex-shrink: 0;
+  height: 2ch;
+}
+
+.sidebar-section {
+  border-radius: 0.5em;
+  border: 1px solid vars.$line-color;
+  width: 100%;
+  flex-grow: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
 
 #project-preview{
   grid-column: 2 / -1;

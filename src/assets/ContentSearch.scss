@@ -1,0 +1,118 @@
+@use "./variables" as vars;
+
+.title-searchbar {
+  display: flex;
+  align-items: center;
+
+  & > p {
+    margin: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+}
+
+.searchbar {
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  align-items: center;
+  margin-left: 6px;
+
+  &:has(.opened) {
+    #icon-search {
+      display: none;
+    }
+
+    #icon-close {
+      display: initial;
+    }
+
+  }
+
+  #icon-close {
+    display: none;
+  }
+}
+
+.searchbar-icon {
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+  position: absolute;
+  right: 2px;
+  animation: icon-entry ease 500ms;
+
+}
+
+.searchbar-input {
+
+  &:not(.opened) {
+    width: 0;
+    opacity: 0;
+    animation: expand-close ease 500ms;
+    pointer-events: none;
+
+  }
+
+  $side-padding: 10px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+
+  padding: {
+    top: 2px;
+    bottom: 2px;
+    right: calc(16px + $side-padding);
+    left: $side-padding;
+  };
+
+
+  border: none;
+  outline: 1px solid black;
+
+  width: 150px;
+  border-radius: 1em;
+  animation: expand-open ease 500ms;
+
+
+}
+
+@keyframes icon-entry {
+  from {
+    opacity: 0;
+    transform: rotateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes expand-open {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 150px;
+    opacity: 1;
+  }
+}
+
+@keyframes expand-close {
+  from {
+    width: 150px;
+    padding: 2px 0;
+    opacity: 1;
+  }
+  to {
+    width: 0;
+    opacity: 0;
+
+  }
+
+}

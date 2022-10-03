@@ -1,8 +1,9 @@
 import {defineComponent, ElementComponent} from "@/core";
 import "@/assets/ElementComponents.scss"
 import DragStartEvent = JQuery.DragStartEvent;
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {it} from "node:test";
+import {ISearchContextObj, SearchContext} from "@/components/ContentSearch";
 
 interface itemProps {
     name: string,
@@ -40,29 +41,37 @@ interface listProps {
 }
 
 export default defineComponent<listProps>((props, context) => {
+    const ctx = useContext(SearchContext);
     const [items, setItems] = useState(props.elementComponents)
 
-    function OnSearchUpdate(e: React.ChangeEvent<HTMLInputElement>) {
-        let searchQuery = e.target.value
-        let filteredItems: ElementComponent[] = []
 
-        for (let i = 0; i < props.elementComponents.length; i++) {
-            let item = props.elementComponents[i];
-            if (item.name.includes(searchQuery)) {
-                filteredItems.push(item)
-            } else if (item.description) {
-                if (item.description.includes(searchQuery)) {
+
+    useEffect(() => {
+        function queryChange(searchQuery:string) {
+            let filteredItems: ElementComponent[] = []
+
+            for (let i = 0; i < props.elementComponents.length; i++) {
+                let item = props.elementComponents[i];
+                if (item.name.includes(searchQuery)) {
                     filteredItems.push(item)
+                } else if (item.description) {
+                    if (item.description.includes(searchQuery)) {
+                        filteredItems.push(item)
+                    }
                 }
             }
-        }
 
-        setItems(filteredItems)
-    }
+            setItems(filteredItems)
+        }
+        ctx.query.subscribe(queryChange)
+        return () => {
+            ctx.query.unsubscribe(queryChange)
+        }
+    })
+
 
     return (
         <div className={"el-comp-ctn"}>
-            <input className={"el-comp-search"} placeholder={"Search name or description"} type={"search"} onChange={OnSearchUpdate}/>
             <ul className={"el-comp-list"}>
                 {
                     items.map((value, index) => {

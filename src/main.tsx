@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {createHashRouter, Navigate, RouterProvider} from "react-router-dom";
 import "@/assets/index.scss"
+
 import App from "@/routes/App";
 
 const router = createHashRouter([

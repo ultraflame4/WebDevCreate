@@ -9,6 +9,7 @@
 }
 
 .el-comp-search{
+
   width: 100%;
   padding: 0.5em;
   margin-bottom: 1em;
@@ -27,6 +28,8 @@
   transition: all ease 200ms;
 
   border-bottom: 1px solid transparent;
+
+  border-bottom-color: rgba(0, 0, 0, 0.24);
 
   &::placeholder{
     font-weight: 600;

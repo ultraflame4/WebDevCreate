@@ -72,12 +72,12 @@ export interface ElementComponent {
 export interface IWebDevCreateAppCtx {
     projectDomTree: Document
     elementComponentList: ElementComponent[]
-    previewDimensions: ObservableValue<{
-        width: number,
-        height: number,
+    previewDimensions: {
+        width: ObservableValue<number>,
+        height: ObservableValue<number>,
         scale: ObservableValue<number>
-        auto?: boolean
-    }>
+        auto: ObservableValue<boolean>
+    }
     appVersion: string
 }
 

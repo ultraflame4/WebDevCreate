@@ -22,14 +22,14 @@ export default defineComponent((props, context) => {
         elementComponentList: htmlElements,
         appVersion: APP_VERSION,
         // @ts-ignore
-        previewDimensions: new ObservableValue(
+        previewDimensions:
             {
-                width: 1920,
-                height: 1080,
-                auto: true,
+                width: new ObservableValue<number>(1920),
+                height: new ObservableValue<number>(1080),
+                auto: new ObservableValue<boolean>(true),
                 scale: new ObservableValue<number>(1)
             }
-            )
+
     }
 
 

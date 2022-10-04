@@ -24,11 +24,14 @@ const ElementComponentItem = defineComponent<itemProps>((props, context) => {
             ev.dataTransfer.setData("attrs", JSON.stringify(props.attrs))
         }
 
+    }
+
+    function OnClick(ev: React.MouseEvent<HTMLLIElement>) {
 
     }
 
     return (
-        <li className={"el-comp-item"} draggable={true} onDragStart={dragStart}>
+        <li className={"el-comp-item"} draggable={true} onDragStart={dragStart} onClick={OnClick}>
             <p>
                 {props.name}
             </p>

@@ -1,4 +1,4 @@
-import {defineComponent, IWebDevCreateAppBuilderCtxObj, ObservableValue, WebDevCreateAppBuilderContext} from "@/core";
+import {defineComponent, IWebDevCreateAppCtx, ObservableValue, WebDevCreateAppCtx} from "@/core";
 import "@/assets/App.scss"
 import ElementTree from "@/components/ElementTree";
 import ProjectPreviewPanel from "@/components/ProjectPreviewPanel";
@@ -17,22 +17,31 @@ export default defineComponent((props, context) => {
         async: false
     }).responseText
 
-    const ctxObj: IWebDevCreateAppBuilderCtxObj = {
+    const ctxObj: IWebDevCreateAppCtx = {
         projectDomTree: new DOMParser().parseFromString(templateString, "text/html"),
         elementComponentList: htmlElements,
-        appVersion: APP_VERSION
+        appVersion: APP_VERSION,
+        // @ts-ignore
+        previewDimensions: new ObservableValue(
+            {
+                width: 1920,
+                height: 1080,
+                auto: true,
+                scale: new ObservableValue<number>(1)
+            }
+            )
     }
 
 
     return (
-        <WebDevCreateAppBuilderContext.Provider value={ctxObj}>
+        <WebDevCreateAppCtx.Provider value={ctxObj}>
             <div id={"app"}>
                 <header id={"app-header"}>
                     <h2>WebDevCreate</h2>
                 </header>
                 <div id={"sidebar"}>
 
-                    <SearchContext.Provider value={{query:new ObservableValue("")}}>
+                    <SearchContext.Provider value={{query: new ObservableValue("")}}>
                         <TitleSearchBar className={"sidebar-title"} title={"Elements & Components"}/>
 
                         <div id={"components-list"} className={"sidebar-section"}>
@@ -50,7 +59,11 @@ export default defineComponent((props, context) => {
                 <div id={"project-preview"}>
                     <ProjectPreviewPanel/>
                 </div>
+
+                <div id={"inspector"}>
+                    <p className={"sidebar-title"}>Inspector</p>
+                </div>
             </div>
-        </WebDevCreateAppBuilderContext.Provider>
+        </WebDevCreateAppCtx.Provider>
     );
 })

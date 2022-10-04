@@ -6,8 +6,6 @@ export function defineComponent<T>(component: React.FunctionComponent<React.Prop
 }
 
 
-
-
 /**
  * modified from https://gist.github.com/karlgroves/7544592
  * @param el
@@ -66,17 +64,24 @@ export function getRelativeCoords(el: Element, pageX: number, pageY: number): { 
 }
 
 export interface ElementComponent {
-    name:string,
-    description?:string,
+    name: string,
+    description?: string,
 }
 
-export interface IWebDevCreateAppBuilderCtxObj{
+
+export interface IWebDevCreateAppCtx {
     projectDomTree: Document
-    elementComponentList : ElementComponent[]
+    elementComponentList: ElementComponent[]
+    previewDimensions: ObservableValue<{
+        width: number,
+        height: number,
+        scale: ObservableValue<number>
+        auto?: boolean
+    }>
     appVersion: string
 }
 
-export const WebDevCreateAppBuilderContext = React.createContext<IWebDevCreateAppBuilderCtxObj|null>(null)
+export const WebDevCreateAppCtx = React.createContext<IWebDevCreateAppCtx | null>(null)
 
 export class ObservableValue<T> {
     private _value: T

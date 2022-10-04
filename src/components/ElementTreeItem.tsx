@@ -1,4 +1,4 @@
-import {defineComponent, getQuerySelector, getRelativeCoords, WebDevCreateAppBuilderContext} from "@/core";
+import {defineComponent, getQuerySelector, getRelativeCoords, WebDevCreateAppCtx} from "@/core";
 import React, {useContext, useRef, useState} from "react";
 import $ from "jquery";
 import {ElementTreeCtx} from "@/components/ElementTree";
@@ -12,7 +12,7 @@ export default defineComponent<props>((props) => {
     const itemRef = useRef<HTMLParagraphElement>(null)
     const rootRef = useRef<HTMLLIElement>(null)
     const context = useContext(ElementTreeCtx)
-    const appContext = useContext(WebDevCreateAppBuilderContext)
+    const appContext = useContext(WebDevCreateAppCtx)
     // not using useState here because setState doesnt work for some reason
     let hasChild = props.el.childElementCount > 0
 

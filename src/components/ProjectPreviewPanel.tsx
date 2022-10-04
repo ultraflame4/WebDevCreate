@@ -131,17 +131,17 @@ export default defineComponent((props, context) => {
                     <br/>
                     <span
                         className={"material-symbols-outlined topbar-tools " + (appCtx.previewDimensions.auto.value ? "checked" : "")}
-                        onClick={autoFit} ref={autofitRef}>
+                        onClick={autoFit} ref={autofitRef} title={"Autofit - automatically fits the size and scale to use the space available"}>
                         fit_screen
                     </span>
                     <br/>
-                    <span className="material-symbols-outlined topbar-tools" onClick={scaleUp}>
+                    <span className="material-symbols-outlined topbar-tools" onClick={scaleUp} title={"Zooms in / Scales up"}>
                         add
                     </span>
                     <span ref={scaleRef} style={{width:38,textAlign:"center"}}>
                         {appCtx.previewDimensions.scale.value.toFixed(2)}
                     </span>
-                    <span className="material-symbols-outlined topbar-tools" onClick={scaleDown}>
+                    <span className="material-symbols-outlined topbar-tools" onClick={scaleDown} title={"Zooms out / Scale down"}>
                         remove
                     </span>
 

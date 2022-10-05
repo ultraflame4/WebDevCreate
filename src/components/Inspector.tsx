@@ -38,6 +38,7 @@ export const ElementText = defineComponent<InspectorItemProps>((props, context) 
             return
 
         props.currentElement.textContent = e.target.value
+
     }
     return (
         <>

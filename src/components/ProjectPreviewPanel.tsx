@@ -48,7 +48,7 @@ export default defineComponent((props, context) => {
             let dimensions = builderCtx.previewDimensions
 
             if (scaleRef.current)
-                scaleRef.current.textContent=dimensions.scale.value.toFixed(2)
+                scaleRef.current.textContent = dimensions.scale.value.toFixed(2)
 
             if (dimensions.auto.value) {
                 iframeRef.current.style.width = "100%"
@@ -102,12 +102,12 @@ export default defineComponent((props, context) => {
         builderCtx.previewDimensions.auto.value = !builderCtx.previewDimensions.auto.value
     }
 
-    const setWidth = (e:React.ChangeEvent<HTMLInputElement>) => {
-        builderCtx.previewDimensions.width.value =e.target.valueAsNumber;
+    const setWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
+        builderCtx.previewDimensions.width.value = e.target.valueAsNumber;
     }
 
-    const setHeight = (e:React.ChangeEvent<HTMLInputElement>) => {
-        builderCtx.previewDimensions.height.value =e.target.valueAsNumber;
+    const setHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
+        builderCtx.previewDimensions.height.value = e.target.valueAsNumber;
     }
 
 
@@ -120,28 +120,33 @@ export default defineComponent((props, context) => {
 
                     <span className={"dim-input"}>
                         width:
-                        <input type="number" min="0" defaultValue={builderCtx.previewDimensions.width.value} onChange={setWidth}/>
+                        <input type="number" min="0" defaultValue={builderCtx.previewDimensions.width.value}
+                               onChange={setWidth}/>
                     </span>
                     <br/>
                     <span className={"dim-input"}>
                         height:
-                        <input type="number" min="0" defaultValue={builderCtx.previewDimensions.height.value} onChange={setHeight}/>
+                        <input type="number" min="0" defaultValue={builderCtx.previewDimensions.height.value}
+                               onChange={setHeight}/>
                     </span>
                     <br/>
                     <br/>
                     <span
                         className={"material-symbols-outlined topbar-tools " + (builderCtx.previewDimensions.auto.value ? "checked" : "")}
-                        onClick={autoFit} ref={autofitRef} title={"Autofit - automatically fits the size and scale to use the space available"}>
+                        onClick={autoFit} ref={autofitRef}
+                        title={"Autofit - automatically fits the size and scale to use the space available"}>
                         fit_screen
                     </span>
                     <br/>
-                    <span className="material-symbols-outlined topbar-tools" onClick={scaleUp} title={"Zooms in / Scales up"}>
+                    <span className="material-symbols-outlined topbar-tools" onClick={scaleUp}
+                          title={"Zooms in / Scales up"}>
                         add
                     </span>
-                    <span ref={scaleRef} style={{width:38,textAlign:"center"}}>
+                    <span ref={scaleRef} style={{width: 38, textAlign: "center"}}>
                         {builderCtx.previewDimensions.scale.value.toFixed(2)}
                     </span>
-                    <span className="material-symbols-outlined topbar-tools" onClick={scaleDown} title={"Zooms out / Scale down"}>
+                    <span className="material-symbols-outlined topbar-tools" onClick={scaleDown}
+                          title={"Zooms out / Scale down"}>
                         remove
                     </span>
 

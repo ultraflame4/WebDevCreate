@@ -110,7 +110,7 @@ export class ObservableValue<T> {
 }
 
 
-export function useObservableValue<T>(observableValue: ObservableValue<T> | null): T | null {
+export function useObservableValue<T>(observableValue: ObservableValue<T> | null | undefined): T | null {
     if (!observableValue) {
         return null;
     }

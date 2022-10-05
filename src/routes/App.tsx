@@ -34,6 +34,7 @@ export default defineComponent((props, context) => {
 
     return (
         <ProjectBuilderContext.Provider value={ctxObj}>
+
             <div id={"app"}>
                 <header id={"app-header"}>
                     <h2>WebDevCreate</h2>

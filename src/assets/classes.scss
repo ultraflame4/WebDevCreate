@@ -1,0 +1,38 @@
+@use "variables.scss" as vars;
+
+.button {
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 0.5em;
+  transition: all ease-in 120ms;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  user-select: none;
+  background: whitesmoke;
+
+  &:hover {
+    border-color: vars.$line-color-highlight;
+    color: vars.$line-color-highlight;
+    background: white;
+  }
+
+ &:active {
+    filter: grayscale(0.6) brightness(0.9);
+  }
+}
+
+.danger-btn {
+  @extend .button;
+
+  color: red;
+  border-color: red;
+
+  &:hover {
+    color: white;
+    background: red;
+    border-color: red;
+  }
+}

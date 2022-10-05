@@ -42,6 +42,11 @@ export function getQuerySelector(el: Element) {
     return getDomPath(el).join(">")
 }
 
+export function getHtmlChildrenArray(el: Element) {
+    return Array.prototype.slice.call(el.children)
+}
+
+
 /**
  * Returns adjusted mouse coordinates relative to the center of element
  * @param el Element

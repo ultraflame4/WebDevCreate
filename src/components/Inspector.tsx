@@ -2,6 +2,7 @@ import {defineComponent, ProjectBuilderContext, useObservableValue} from "@/core
 import React, {HTMLAttributes, useContext, useEffect, useRef} from "react";
 
 import "@/assets/Inspector.scss"
+import CollapsibleItem from "@/components/CollapsibleItem";
 
 interface InspectorItemProps {
     currentElement: Element
@@ -55,12 +56,10 @@ export const ElementText = defineComponent<InspectorItemProps>((props, context) 
 
     }
     return (
-        <>
-            <h1>Text</h1>
-            <textarea onChange={onTextChange} ref={txtAreaRef}></textarea>
-        </>
+        <textarea onChange={onTextChange} ref={txtAreaRef}></textarea>
     )
 })
+
 
 export const Inspector = defineComponent((props, context) => {
     const projectCtx = useContext(ProjectBuilderContext)
@@ -75,11 +74,15 @@ export const Inspector = defineComponent((props, context) => {
     return (
         <ul className={"inspector-items"}>
             <li className={"inspector-el-text"}>
-                <ElementText currentElement={currentElement}/>
+                <CollapsibleItem title={"Text"}>
+                    <ElementText currentElement={currentElement}/>
+                </CollapsibleItem>
+
             </li>
             <li>
-                <h1>Other Options</h1>
-                <ElementOptions currentElement={currentElement}/>
+                <CollapsibleItem title={"Other Options"}>
+                    <ElementOptions currentElement={currentElement}/>
+                </CollapsibleItem>
             </li>
         </ul>
     )

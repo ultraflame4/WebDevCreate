@@ -1,0 +1,43 @@
+.collapsible-titlebar {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+
+  font-size: 0.8em;
+  flex-shrink: 0;
+  height: 2ch;
+  display: flex;
+  align-items: center;
+
+
+  a {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+  }
+
+  span {
+    transition: all ease 100ms;
+    user-select: none;
+  }
+
+  &.collapsed > a > span {
+
+    transform: rotate(90deg);
+  }
+}
+
+.collapsible-content {
+  height: fit-content;
+  transition: all ease-in-out 120ms;
+
+}
+
+*:has(>.collapsible-titlebar.collapsed) > .collapsible-content {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+
+}

@@ -28,17 +28,18 @@
     height: 2ch;
   }
 
-  .inspector-el-text {
 
-    & > textarea {
+}
+.inspector-el-text {
 
-      width: 100%;
-      height: 86px;
-      resize: vertical;
-      border: 1px solid black;
-      border-radius: 4px;
+  & textarea {
 
-    }
+    width: 100%;
+    height: 86px;
+    resize: vertical;
+    border: 1px solid black;
+    border-radius: 6px;
+
   }
 }
 

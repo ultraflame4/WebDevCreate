@@ -1,4 +1,4 @@
-import {defineComponent, WebDevCreateAppCtx} from "@/core";
+import {defineComponent, ProjectBuilderContext} from "@/core";
 import {useContext, useEffect, useRef, useState} from "react";
 import "@/assets/ProjectPreview.scss"
 
@@ -6,11 +6,11 @@ export default defineComponent((props, context) => {
     const rootRef = useRef<HTMLDivElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const scaleRef = useRef<HTMLSpanElement>(null);
-    const appCtx = useContext(WebDevCreateAppCtx)
+    const builderCtx = useContext(ProjectBuilderContext)
 
-    if (!appCtx) {
+    if (!builderCtx) {
 
-        console.error("Error: WebDecCreate App builder context is null. Goddammit react!@#$")
+        console.error("Error: Project Builder context is null. Goddammit react!@#$")
         return (
             <div>
                 ERROR CONTEXT NOT FOUND!
@@ -26,11 +26,11 @@ export default defineComponent((props, context) => {
                 console.error("Cannot get project preview panel iframe!")
                 return
             }
-            iframeRef.current.srcdoc = appCtx.projectDomTree.documentElement.outerHTML
+            iframeRef.current.srcdoc = builderCtx.projectDomTree.documentElement.outerHTML
         })
 
         observer.observe(
-            appCtx.projectDomTree.documentElement,
+            builderCtx.projectDomTree.documentElement,
             {
                 childList: true,
                 attributes: true,
@@ -45,7 +45,7 @@ export default defineComponent((props, context) => {
                 return
             }
 
-            let dimensions = appCtx.previewDimensions
+            let dimensions = builderCtx.previewDimensions
 
             if (scaleRef.current)
                 scaleRef.current.textContent=dimensions.scale.value.toFixed(2)
@@ -63,26 +63,26 @@ export default defineComponent((props, context) => {
         }
 
 
-        appCtx.previewDimensions.auto.subscribe(OnPreviewDimensionChange)
-        appCtx.previewDimensions.scale.subscribe(OnPreviewDimensionChange)
-        appCtx.previewDimensions.height.subscribe(OnPreviewDimensionChange)
-        appCtx.previewDimensions.width.subscribe(OnPreviewDimensionChange)
+        builderCtx.previewDimensions.auto.subscribe(OnPreviewDimensionChange)
+        builderCtx.previewDimensions.scale.subscribe(OnPreviewDimensionChange)
+        builderCtx.previewDimensions.height.subscribe(OnPreviewDimensionChange)
+        builderCtx.previewDimensions.width.subscribe(OnPreviewDimensionChange)
         OnPreviewDimensionChange()
         return () => {
             observer.disconnect()
-            appCtx.previewDimensions.auto.unsubscribe(OnPreviewDimensionChange)
-            appCtx.previewDimensions.scale.unsubscribe(OnPreviewDimensionChange)
-            appCtx.previewDimensions.width.unsubscribe(OnPreviewDimensionChange)
-            appCtx.previewDimensions.height.unsubscribe(OnPreviewDimensionChange)
+            builderCtx.previewDimensions.auto.unsubscribe(OnPreviewDimensionChange)
+            builderCtx.previewDimensions.scale.unsubscribe(OnPreviewDimensionChange)
+            builderCtx.previewDimensions.width.unsubscribe(OnPreviewDimensionChange)
+            builderCtx.previewDimensions.height.unsubscribe(OnPreviewDimensionChange)
         }
     })
 
     function scalePanel(diff: number) {
-        if (!appCtx)
+        if (!builderCtx)
             return
-        let val = appCtx.previewDimensions.scale.value + diff
+        let val = builderCtx.previewDimensions.scale.value + diff
         if (val > 0)
-            appCtx.previewDimensions.scale.value = val
+            builderCtx.previewDimensions.scale.value = val
     }
 
     function scaleDown() {
@@ -99,15 +99,15 @@ export default defineComponent((props, context) => {
         if (!autofitRef.current)
             return
         autofitRef.current.classList.toggle("checked")
-        appCtx.previewDimensions.auto.value = !appCtx.previewDimensions.auto.value
+        builderCtx.previewDimensions.auto.value = !builderCtx.previewDimensions.auto.value
     }
 
     const setWidth = (e:React.ChangeEvent<HTMLInputElement>) => {
-        appCtx.previewDimensions.width.value =e.target.valueAsNumber;
+        builderCtx.previewDimensions.width.value =e.target.valueAsNumber;
     }
 
     const setHeight = (e:React.ChangeEvent<HTMLInputElement>) => {
-        appCtx.previewDimensions.height.value =e.target.valueAsNumber;
+        builderCtx.previewDimensions.height.value =e.target.valueAsNumber;
     }
 
 
@@ -120,17 +120,17 @@ export default defineComponent((props, context) => {
 
                     <span className={"dim-input"}>
                         width:
-                        <input type="number" min="0" defaultValue={appCtx.previewDimensions.width.value} onChange={setWidth}/>
+                        <input type="number" min="0" defaultValue={builderCtx.previewDimensions.width.value} onChange={setWidth}/>
                     </span>
                     <br/>
                     <span className={"dim-input"}>
                         height:
-                        <input type="number" min="0" defaultValue={appCtx.previewDimensions.height.value} onChange={setHeight}/>
+                        <input type="number" min="0" defaultValue={builderCtx.previewDimensions.height.value} onChange={setHeight}/>
                     </span>
                     <br/>
                     <br/>
                     <span
-                        className={"material-symbols-outlined topbar-tools " + (appCtx.previewDimensions.auto.value ? "checked" : "")}
+                        className={"material-symbols-outlined topbar-tools " + (builderCtx.previewDimensions.auto.value ? "checked" : "")}
                         onClick={autoFit} ref={autofitRef} title={"Autofit - automatically fits the size and scale to use the space available"}>
                         fit_screen
                     </span>
@@ -139,7 +139,7 @@ export default defineComponent((props, context) => {
                         add
                     </span>
                     <span ref={scaleRef} style={{width:38,textAlign:"center"}}>
-                        {appCtx.previewDimensions.scale.value.toFixed(2)}
+                        {builderCtx.previewDimensions.scale.value.toFixed(2)}
                     </span>
                     <span className="material-symbols-outlined topbar-tools" onClick={scaleDown} title={"Zooms out / Scale down"}>
                         remove
@@ -148,7 +148,7 @@ export default defineComponent((props, context) => {
                 </div>
             </div>
             <div className={"preview-ctn"}>
-                <iframe srcDoc={appCtx.projectDomTree.documentElement.outerHTML} ref={iframeRef}></iframe>
+                <iframe srcDoc={builderCtx.projectDomTree.documentElement.outerHTML} ref={iframeRef}></iframe>
             </div>
         </div>
     )

@@ -57,7 +57,7 @@
   gap: 0.4rem;
 
 
-  #components-list{
+  #components-list {
     height: 175px;
     flex-shrink: 0;
   }
@@ -88,7 +88,7 @@
 }
 
 
-#project-preview{
+#project-preview {
   grid-column: 2 / 3;
   grid-row: 2 / -2;
 
@@ -99,8 +99,21 @@
 
 }
 
-#inspector{
+#inspector {
   border-left: 1px solid vars.$line-color;
   grid-column: 3 / 4;
   grid-row: 2 / -2;
+  display: flex;
+  flex-direction: column;
+
+  & > .sidebar-title {
+    display: flex;
+    margin: 0;
+    flex-shrink: 0;
+    padding-left: 0.4em;
+    height: 32px;
+    align-items: center;
+    border-bottom: 1px solid black;
+    box-sizing: border-box;
+  }
 }

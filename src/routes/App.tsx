@@ -1,13 +1,13 @@
-import {defineComponent, IWebDevCreateAppCtx, ObservableValue, WebDevCreateAppCtx} from "@/core";
+import {defineComponent, IProjectBuilderContext, ObservableValue, ProjectBuilderContext} from "@/core";
 import "@/assets/App.scss"
-import ElementTree from "@/components/ElementTree";
+
 import ProjectPreviewPanel from "@/components/ProjectPreviewPanel";
 import templateUrl from "@/assets/template.html?url"
 
 import $ from "jquery"
-import ElementComponentsList from "@/components/ElementComponents";
 import htmlElements from "@/htmlElements.json";
-import {SearchContext, TitleSearchBar} from "@/components/ContentSearch";
+import {Sidebar} from "@/components/Sidebar";
+import {Inspector} from "@/components/Inspector";
 
 
 export default defineComponent((props, context) => {
@@ -17,44 +17,28 @@ export default defineComponent((props, context) => {
         async: false
     }).responseText
 
-    const ctxObj: IWebDevCreateAppCtx = {
+    const ctxObj: IProjectBuilderContext = {
         projectDomTree: new DOMParser().parseFromString(templateString, "text/html"),
         elementComponentList: htmlElements,
-        appVersion: APP_VERSION,
-        // @ts-ignore
-        previewDimensions:
-            {
-                width: new ObservableValue<number>(1920),
-                height: new ObservableValue<number>(1080),
-                auto: new ObservableValue<boolean>(true),
-                scale: new ObservableValue<number>(1)
-            }
+        previewDimensions: {
+            width: new ObservableValue<number>(1920),
+            height: new ObservableValue<number>(1080),
+            auto: new ObservableValue<boolean>(true),
+            scale: new ObservableValue<number>(1)
+        },
+        currentSelectedElement: new ObservableValue<Element | null>(null)
 
     }
 
 
     return (
-        <WebDevCreateAppCtx.Provider value={ctxObj}>
+        <ProjectBuilderContext.Provider value={ctxObj}>
             <div id={"app"}>
                 <header id={"app-header"}>
                     <h2>WebDevCreate</h2>
                 </header>
                 <div id={"sidebar"}>
-
-                    <SearchContext.Provider value={{query: new ObservableValue("")}}>
-                        <TitleSearchBar className={"sidebar-title"} title={"Elements & Components"}/>
-
-                        <div id={"components-list"} className={"sidebar-section"}>
-                            <ElementComponentsList elementComponents={ctxObj.elementComponentList}/>
-                        </div>
-
-                    </SearchContext.Provider>
-
-                    <p className={"sidebar-title"}>Html Tree</p>
-                    <div id={"sidebar-tree"} className={"sidebar-section"}>
-                        <ElementTree root_element={ctxObj.projectDomTree.body}/>
-                    </div>
-
+                    <Sidebar/>
                 </div>
                 <div id={"project-preview"}>
                     <ProjectPreviewPanel/>
@@ -62,8 +46,10 @@ export default defineComponent((props, context) => {
 
                 <div id={"inspector"}>
                     <p className={"sidebar-title"}>Inspector</p>
+                    <Inspector/>
                 </div>
             </div>
-        </WebDevCreateAppCtx.Provider>
+
+        </ProjectBuilderContext.Provider>
     );
 })

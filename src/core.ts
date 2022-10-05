@@ -69,7 +69,7 @@ export interface ElementComponent {
 }
 
 
-export interface IWebDevCreateAppCtx {
+export interface IProjectBuilderContext {
     projectDomTree: Document
     elementComponentList: ElementComponent[]
     previewDimensions: {
@@ -77,11 +77,11 @@ export interface IWebDevCreateAppCtx {
         height: ObservableValue<number>,
         scale: ObservableValue<number>
         auto: ObservableValue<boolean>
-    }
-    appVersion: string
+    },
+    currentSelectedElement: ObservableValue<Element | null>
 }
 
-export const WebDevCreateAppCtx = React.createContext<IWebDevCreateAppCtx | null>(null)
+export const ProjectBuilderContext = React.createContext<IProjectBuilderContext | null>(null)
 
 export class ObservableValue<T> {
     private _value: T

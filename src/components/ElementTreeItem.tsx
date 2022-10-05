@@ -1,4 +1,4 @@
-import {defineComponent, getQuerySelector, getRelativeCoords, WebDevCreateAppCtx} from "@/core";
+import {defineComponent, getQuerySelector, getRelativeCoords, ProjectBuilderContext} from "@/core";
 import React, {useContext, useRef, useState} from "react";
 import $ from "jquery";
 import {ElementTreeCtx} from "@/components/ElementTree";
@@ -12,7 +12,7 @@ export default defineComponent<props>((props) => {
     const itemRef = useRef<HTMLParagraphElement>(null)
     const rootRef = useRef<HTMLLIElement>(null)
     const context = useContext(ElementTreeCtx)
-    const appContext = useContext(WebDevCreateAppCtx)
+    const appContext = useContext(ProjectBuilderContext)
     // not using useState here because setState doesnt work for some reason
     let hasChild = props.el.childElementCount > 0
 
@@ -25,11 +25,12 @@ export default defineComponent<props>((props) => {
         if (context.focusedElement !== null) {
             context.focusedElement.classList.remove("is-focused")
         }
-        if (itemRef.current === null) {
+        if (!itemRef.current||!appContext) {
             return
         }
         itemRef.current.classList.add("is-focused");
         context.focusedElement = itemRef.current
+        appContext.currentSelectedElement.value=props.el
     }
 
     function clearDragOverClass(el: Element | null) {

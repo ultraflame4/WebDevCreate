@@ -19,25 +19,18 @@ export default defineComponent((props, context) => {
     }
 
     useEffect(() => {
+        if (iframeRef.current === null) {
+            console.error("Cannot get project preview panel iframe!")
+            return
+        }
+        if (!iframeRef.current.contentWindow){
+            console.error("Cannot get project preview panel iframe content window!")
+            return
+        }
 
-
-        const observer = new MutationObserver((mutations) => {
-            if (iframeRef.current === null) {
-                console.error("Cannot get project preview panel iframe!")
-                return
-            }
-            iframeRef.current.srcdoc = builderCtx.projectDomTree.documentElement.outerHTML
-        })
-
-        observer.observe(
-            builderCtx.projectDomTree.documentElement,
-            {
-                childList: true,
-                attributes: true,
-                subtree: true
-            }
-        )
-
+        let contentWindow = iframeRef.current.contentWindow
+        contentWindow.document.documentElement.innerHTML = builderCtx.liveProjectDomTree.value.documentElement.outerHTML
+        builderCtx.liveProjectDomTree.value = contentWindow.document
 
         const OnPreviewDimensionChange = () => {
             if (iframeRef.current === null) {
@@ -69,7 +62,7 @@ export default defineComponent((props, context) => {
         builderCtx.previewDimensions.width.subscribe(OnPreviewDimensionChange)
         OnPreviewDimensionChange()
         return () => {
-            observer.disconnect()
+            // observer.disconnect()
             builderCtx.previewDimensions.auto.unsubscribe(OnPreviewDimensionChange)
             builderCtx.previewDimensions.scale.unsubscribe(OnPreviewDimensionChange)
             builderCtx.previewDimensions.width.unsubscribe(OnPreviewDimensionChange)
@@ -153,7 +146,7 @@ export default defineComponent((props, context) => {
                 </div>
             </div>
             <div className={"preview-ctn"}>
-                <iframe srcDoc={builderCtx.projectDomTree.documentElement.outerHTML} ref={iframeRef}></iframe>
+                <iframe ref={iframeRef}></iframe>
             </div>
         </div>
     )

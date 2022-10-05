@@ -70,7 +70,7 @@ export interface ElementComponent {
 
 
 export interface IProjectBuilderContext {
-    projectDomTree: Document
+    liveProjectDomTree: ObservableValue<Document>,
     elementComponentList: ElementComponent[]
     previewDimensions: {
         width: ObservableValue<number>,
@@ -107,4 +107,22 @@ export class ObservableValue<T> {
     unsubscribe(listener: (value: T) => void) {
         this._listeners = this._listeners.filter(l => l !== listener)
     }
+}
+
+
+export function useObservableValue<T>(observableValue: ObservableValue<T> | null): T | null {
+    if (!observableValue) {
+        return null;
+    }
+    let [value, setValue] = React.useState(observableValue.value);
+    React.useEffect(() => {
+
+        let listener = (value: T) => {
+            setValue(value)
+        }
+
+        observableValue.subscribe(listener)
+        return () => observableValue.unsubscribe(listener)
+    })
+    return value
 }

@@ -52,8 +52,6 @@ export default defineComponent<props>((props) => {
 
     }
 
-    // todo stop drag drop when it item being dropped is its own child. !important
-
     function OnDragOver(ev: React.DragEvent<HTMLLIElement>) {
 
         ev.preventDefault()
@@ -108,7 +106,7 @@ export default defineComponent<props>((props) => {
         let el;
         if (data) {
             // el represents the element in project iframe
-            el = $(appContext.projectDomTree).find(data).get()[0]
+            el = $(appContext.liveProjectDomTree.value).find(data).get()[0]
         }
         else if (newEl_tagName){
             el = document.createElement(newEl_tagName);

@@ -18,7 +18,8 @@ export default defineComponent((props, context) => {
     }).responseText
 
     const ctxObj: IProjectBuilderContext = {
-        projectDomTree: new DOMParser().parseFromString(templateString, "text/html"),
+        // projectDomTree: new DOMParser().parseFromString(templateString, "text/html"),
+        liveProjectDomTree: new ObservableValue<Document>(new DOMParser().parseFromString(templateString, "text/html")),
         elementComponentList: htmlElements,
         previewDimensions: {
             width: new ObservableValue<number>(1920),

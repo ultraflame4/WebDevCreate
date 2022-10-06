@@ -4,10 +4,10 @@ import "@/assets/CollapsibleItem.scss"
 
 
 
-export default defineComponent<{title:string}>((props, context) => {
+const CollapsibleItem = defineComponent<{title:string}>((props, context) => {
     const itemRef = useRef<HTMLHeadingElement>(null)
 
-    function toggleChildren(e:React.MouseEvent<HTMLDivElement>) {
+    function toggleChildren(e:React.MouseEvent<any>) {
         if (!itemRef.current) return;
         console.log("test")
         itemRef.current.classList.toggle("collapsed")
@@ -15,11 +15,11 @@ export default defineComponent<{title:string}>((props, context) => {
 
     return (
         <div >
-            <h1 className={"collapsible-titlebar"} ref={itemRef} onClick={toggleChildren}>
+            <h1 className={"collapsible-titlebar"} ref={itemRef}>
                 {props.title}
                 {
                     props.children ?
-                        <a >
+                        <a onClick={toggleChildren}>
                             <span className={"material-symbols-outlined"}>expand_more</span>
                         </a> :
                         <span style={{width: "12px"}}></span>
@@ -31,3 +31,5 @@ export default defineComponent<{title:string}>((props, context) => {
         </div>
     )
 })
+
+export default CollapsibleItem

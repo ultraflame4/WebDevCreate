@@ -1,5 +1,5 @@
 import {defineComponent, IProjectBuilderContext, ProjectBuilderContext, useObservableValue} from "@/core";
-import React, {HTMLAttributes, useContext, useEffect, useRef} from "react";
+import React, {PropsWithChildren, useContext, useEffect, useRef} from "react";
 
 import "@/assets/Inspector.scss"
 import CollapsibleItem from "@/components/CollapsibleItem";
@@ -9,30 +9,63 @@ interface InspectorItemProps {
     builderCtx: IProjectBuilderContext
 }
 
-export const ElementOptions = defineComponent<InspectorItemProps>((props, context) => {
+type InspectorItem = {
+    title: string,
+    component: React.FunctionComponent<PropsWithChildren<InspectorItemProps>>
+}
+const InspectorItems: InspectorItem[] = []
+
+export function defineInspectorItem(name: string, component: React.FunctionComponent<React.PropsWithChildren<InspectorItemProps>>) {
+    InspectorItems.push({
+        title: name,
+        component: component
+    })
+    return component
+}
+
+
+
+export const Inspector = defineComponent((props, context) => {
+    const projectCtx = useContext(ProjectBuilderContext)
+    const currentElement = useObservableValue(projectCtx?.currentSelectedElement)
+
+    if (projectCtx === null) {
+        return (
+            <ul className={"inspector-items"}>Project Context is null!</ul>
+        )
+    }
+
+
+    if (!currentElement) {
+        return (
+            <ul className={"inspector-items"}>No element selected</ul>
+        )
+    }
 
     return (
-        <ul className={"inspector-el-options"}>
-            <li onClick={event => alert("Not implemented!")}>Make Component</li>
-            <li className={"delete-btn"} onClick={event => {
-                if (!props.currentElement.parentElement) {
-                    alert("Cannot delete root element")
-                    return
-                }
-                if (props.currentElement.parentElement.tagName.toLowerCase() === "html") {
-                    alert("Cannot delete child elements of html! ( head, body )")
-                    return
-                }
+        <ul className={"inspector-items"}>
+            {
+                InspectorItems.map((value, index) => {
+                    return (
+                        <li>
+                            <CollapsibleItem title={value.title}>
+                                {React.createElement(value.component,{
+                                    builderCtx: projectCtx,
+                                    currentElement: currentElement
+                                })}
 
-                props.currentElement.remove()
-                props.builderCtx.currentSelectedElement.value=null
-            }}>Delete Element
-            </li>
+                            </CollapsibleItem>
+                        </li>
+                    )
+                })
+            }
+
         </ul>
     )
 })
 
-export const ElementText = defineComponent<InspectorItemProps>((props, context) => {
+
+export const ElementText = defineInspectorItem("Text", (props, context) => {
     const txtAreaRef = useRef<HTMLTextAreaElement>(null)
 
     useEffect(() => {
@@ -59,40 +92,30 @@ export const ElementText = defineComponent<InspectorItemProps>((props, context) 
 
     }
     return (
-        <textarea onChange={onTextChange} ref={txtAreaRef}></textarea>
+        <textarea className={"inspector-el-text"} onChange={onTextChange} ref={txtAreaRef}></textarea>
     )
 })
 
 
-export const Inspector = defineComponent((props, context) => {
-    const projectCtx = useContext(ProjectBuilderContext)
-    const currentElement = useObservableValue(projectCtx?.currentSelectedElement)
-
-    if (projectCtx === null) {
-        return (
-            <ul className={"inspector-items"}>Project Context is null!</ul>
-        )
-    }
-
-
-    if (!currentElement) {
-        return (
-            <ul className={"inspector-items"}>No element selected</ul>
-        )
-    }
+export const ElementOptions = defineInspectorItem("Other options", (props, context) => {
 
     return (
-        <ul className={"inspector-items"}>
-            <li className={"inspector-el-text"}>
-                <CollapsibleItem title={"Text"}>
-                    <ElementText currentElement={currentElement} builderCtx={projectCtx}/>
-                </CollapsibleItem>
+        <ul className={"inspector-el-options"}>
+            <li onClick={event => alert("Not implemented!")}>Make Component</li>
+            <li className={"delete-btn"} onClick={event => {
+                if (!props.currentElement.parentElement) {
+                    alert("Cannot delete root element")
+                    return
+                }
+                if (props.currentElement.parentElement.tagName.toLowerCase() === "html") {
+                    alert("Cannot delete child elements of html! ( head, body )")
+                    return
+                }
 
-            </li>
-            <li>
-                <CollapsibleItem title={"Other Options"}>
-                    <ElementOptions currentElement={currentElement} builderCtx={projectCtx}/>
-                </CollapsibleItem>
+                props.currentElement.remove()
+                props.builderCtx.currentSelectedElement.value = null
+            }}>
+                Delete Element
             </li>
         </ul>
     )

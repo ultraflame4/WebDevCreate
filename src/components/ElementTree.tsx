@@ -39,13 +39,15 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
     const [children, setChildren] = useState(new Array<Element>())
 
     useEffect(() => {
+
         if (children.length !== props.el.childElementCount) {
             setChildren(getHtmlChildrenArray(props.el))
+
         }
 
         const observer = new MutationObserver((mutations) => {
+
             setChildren(getHtmlChildrenArray(props.el))
-            console.log("observe: chidlren", children, props.el)
         })
         observer.observe(
             props.el,
@@ -61,6 +63,7 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
         }
     })
 
+
     function toggleChildren() {
         itemRef.current?.classList.toggle("collapsed")
     }
@@ -75,7 +78,6 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
         itemRef.current.classList.add("is-focused");
         context.focusedElement = itemRef.current
         appContext.currentSelectedElement.value = props.el
-        console.log(props.el)
     }
 
     function clearDragOverClass(el: Element | null) {
@@ -214,11 +216,17 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
                 <span className={"tagname"}>&lt;{props.el.tagName.toLowerCase()}&gt;</span>
             </p>
             <ul>
+
                 {
-                    children.map((value, index) => {
+                    children.map((value, index, array) => {
+                        // bug here, children array used is incorrect sometimes. cannot find cause, this is the workaround
+                        if (children.length != props.el.children.length) {
+                            console.warn("children length mismatch")
+                            return (<></>)
+                        }
                         return (
                             <ElementTreeItem el={props.el.children.item(index)!} key={index}/>
-                        )
+                        );
                     })
                 }
             </ul>

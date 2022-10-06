@@ -32,6 +32,7 @@ export default defineComponent((props, context) => {
         contentWindow.document.documentElement.innerHTML = builderCtx.liveProjectDomTree.value.documentElement.outerHTML
         builderCtx.liveProjectDomTree.value = contentWindow.document
 
+
         const OnPreviewDimensionChange = () => {
             if (iframeRef.current === null) {
                 console.error("Cannot get project preview panel iframe!")

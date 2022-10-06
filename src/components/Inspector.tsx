@@ -1,4 +1,4 @@
-import {defineComponent, ProjectBuilderContext, useObservableValue} from "@/core";
+import {defineComponent, IProjectBuilderContext, ProjectBuilderContext, useObservableValue} from "@/core";
 import React, {HTMLAttributes, useContext, useEffect, useRef} from "react";
 
 import "@/assets/Inspector.scss"
@@ -6,6 +6,7 @@ import CollapsibleItem from "@/components/CollapsibleItem";
 
 interface InspectorItemProps {
     currentElement: Element
+    builderCtx: IProjectBuilderContext
 }
 
 export const ElementOptions = defineComponent<InspectorItemProps>((props, context) => {
@@ -22,7 +23,9 @@ export const ElementOptions = defineComponent<InspectorItemProps>((props, contex
                     alert("Cannot delete child elements of html! ( head, body )")
                     return
                 }
+
                 props.currentElement.remove()
+                props.builderCtx.currentSelectedElement.value=null
             }}>Delete Element
             </li>
         </ul>
@@ -65,6 +68,13 @@ export const Inspector = defineComponent((props, context) => {
     const projectCtx = useContext(ProjectBuilderContext)
     const currentElement = useObservableValue(projectCtx?.currentSelectedElement)
 
+    if (projectCtx === null) {
+        return (
+            <ul className={"inspector-items"}>Project Context is null!</ul>
+        )
+    }
+
+
     if (!currentElement) {
         return (
             <ul className={"inspector-items"}>No element selected</ul>
@@ -75,13 +85,13 @@ export const Inspector = defineComponent((props, context) => {
         <ul className={"inspector-items"}>
             <li className={"inspector-el-text"}>
                 <CollapsibleItem title={"Text"}>
-                    <ElementText currentElement={currentElement}/>
+                    <ElementText currentElement={currentElement} builderCtx={projectCtx}/>
                 </CollapsibleItem>
 
             </li>
             <li>
                 <CollapsibleItem title={"Other Options"}>
-                    <ElementOptions currentElement={currentElement}/>
+                    <ElementOptions currentElement={currentElement} builderCtx={projectCtx}/>
                 </CollapsibleItem>
             </li>
         </ul>

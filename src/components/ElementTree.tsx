@@ -36,12 +36,16 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
     const rootRef = useRef<HTMLLIElement>(null)
     const context = useContext(ElementTreeCtx)
     const appContext = useContext(ProjectBuilderContext)
-    const [children, setChildren] = useState(getHtmlChildrenArray(props.el))
+    const [children, setChildren] = useState(new Array<Element>())
 
     useEffect(() => {
+        if (children.length !== props.el.childElementCount) {
+            setChildren(getHtmlChildrenArray(props.el))
+        }
 
         const observer = new MutationObserver((mutations) => {
             setChildren(getHtmlChildrenArray(props.el))
+            console.log("observe: chidlren", children, props.el)
         })
         observer.observe(
             props.el,
@@ -71,6 +75,7 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
         itemRef.current.classList.add("is-focused");
         context.focusedElement = itemRef.current
         appContext.currentSelectedElement.value = props.el
+        console.log(props.el)
     }
 
     function clearDragOverClass(el: Element | null) {
@@ -211,9 +216,8 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
             <ul>
                 {
                     children.map((value, index) => {
-
                         return (
-                            <ElementTreeItem el={value} key={index}/>
+                            <ElementTreeItem el={props.el.children.item(index)!} key={index}/>
                         )
                     })
                 }

@@ -10,11 +10,6 @@
   padding: 0 0.4em;
   margin: 0;
 
-  ul {
-    list-style: none;
-    padding: 0;
-
-  }
 
   * {
     box-sizing: border-box;
@@ -77,10 +72,10 @@ textarea.inspector-el-text {
   }
 }
 
-.inspector-el-position{
+.inspector-el-dimensions{
   display: flex;
   flex-direction: column;
-
+  overflow: visible;
 
   &>ul{
     display: grid;

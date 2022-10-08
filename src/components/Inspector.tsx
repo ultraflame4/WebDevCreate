@@ -10,6 +10,7 @@ import React, {PropsWithChildren, useContext, useEffect, useRef} from "react";
 import "@/assets/components/Inspector.scss"
 import CollapsibleItem from "@/components/CollapsibleItem";
 import {TabMenuBar, TabMenuCtx} from "@/components/TabMenu";
+import {DropdownMenu} from "@/components/DropdownMenu";
 
 interface InspectorItemProps {
     currentElement: Element
@@ -71,19 +72,18 @@ export const Inspector = defineComponent((props, context) => {
 })
 
 
-export const ElementPosition = defineInspectorItem("Position", (props, context) => {
-    const ctxObj = {
-        tab_names:new ObservableValue<string[]>(["static","relative","fixed","absolute","sticky"]),
-        opened_tab: new ObservableValue<number>(0)
+export const ElementDimensions = defineInspectorItem("Dimensions", (props, context) => {
+    const positionTypes = [
+        "static","relative","absolute","sticky","fixed"
+    ]
+
+    function handlePositionTypeSelect(data: string) {
+
     }
 
-
-
     return (
-        <div className={"inspector-el-position"}>
-            <TabMenuCtx.Provider value={ctxObj}>
-                <TabMenuBar style={{fontSize:"0.8em"}}/>
-            </TabMenuCtx.Provider>
+        <div className={"inspector-el-dimensions"}>
+            <DropdownMenu onSelect={handlePositionTypeSelect} options={positionTypes} defaultOption={0}/>
             <ul>
                 <li><span>x</span> <input type={"number"}/></li>
                 <li><span>y</span> <input type={"number"}/></li>

@@ -1,0 +1,93 @@
+@use "@/assets/variables.scss" as vars;
+
+.dropdown-input {
+  display: flex;
+  align-items: center;
+
+  padding: 0 2em 0 0.5em;
+
+  height: 24px;
+  width: 100%;
+  user-select: none;
+  font-size: 0.8em;
+  font-weight: 500;
+  border: 1px solid vars.$line-color;
+  border-radius: 6px;
+  position: relative;
+
+  &:not(.checked) {
+    & > span {
+      transform: rotateZ(90deg);
+    }
+  }
+
+  &.checked{
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+  }
+
+  & > span {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    user-select: none;
+    transition: all ease 200ms;
+
+  }
+}
+
+*:has(.dropdown-menu) {
+  position: relative;
+}
+
+*:has(.dropdown-input.checked) {
+  & > .dropdown-menu {
+    display: initial;
+
+  }
+
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  font-size: 0.8em;
+  background: vars.$bg;
+
+  z-index: 2;
+  width: 100%;
+  max-height: 100px;
+  overflow: auto;
+
+  border-radius: 0 0 8px 8px;
+  border: 1px solid black;
+  border-top: none;
+
+  padding: 0 0.2em 0.2em;
+
+  filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.5));
+  list-style: none;
+
+  & > li {
+    user-select: none;
+    margin-top: 0.5em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    transition: background-color ease-in 200ms, color ease 100ms;
+
+    &:hover{
+      background: vars.$bg-hover
+    }
+    &:active{
+      background: vars.$bg-active
+    }
+
+    &.selected{
+      color: white;
+      background: vars.$line-color-highlight;
+      font-weight: 600;
+    }
+  }
+
+}

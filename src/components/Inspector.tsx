@@ -73,22 +73,29 @@ export const Inspector = defineComponent((props, context) => {
 
 
 export const ElementDimensions = defineInspectorItem("Dimensions", (props, context) => {
+
     const positionTypes = [
         "static","relative","absolute","sticky","fixed"
     ]
+    let currentElement = props.currentElement as HTMLElement
+
+    let posStyle = currentElement.style.position.trim()
+    let elementPosition = (posStyle.length<1?"static":posStyle)
+
+    // @ts-ignore
+    if (props.currentElement.style === undefined){
+        return <></>
+    }
 
     function handlePositionTypeSelect(data: string) {
+        currentElement.style.position=data
 
     }
 
     return (
         <div className={"inspector-el-dimensions"}>
-            <DropdownMenu onSelect={handlePositionTypeSelect} options={positionTypes} defaultOption={0}/>
-            <ul>
-                <li><span>x</span> <input type={"number"}/></li>
-                <li><span>y</span> <input type={"number"}/></li>
-
-            </ul>
+            <h2>Position type</h2>
+            <DropdownMenu onSelect={handlePositionTypeSelect} options={positionTypes} defaultOption={positionTypes.indexOf(elementPosition)}/>
 
         </div>
     )

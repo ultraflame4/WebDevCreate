@@ -24,12 +24,25 @@
     margin-bottom: 0.5em;
     font-weight: 600;
 
-    font-size: 0.8em;
+    font-size: 0.875em;
     flex-shrink: 0;
     height: 2ch;
   }
 
+  h2 {
+    margin: 0;
 
+    font-weight: 600;
+
+    font-size: 0.78em;
+    flex-shrink: 0;
+    height: 2ch;
+  }
+
+  p{
+    margin: 0;
+    font-size: 0.8em;
+  }
 }
 
 textarea.inspector-el-text {
@@ -73,41 +86,10 @@ textarea.inspector-el-text {
 }
 
 .inspector-el-dimensions{
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-
-  &>ul{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 12px;
-    padding: 4px;
-    box-sizing: border-box;
-
-
-    &>li{
-      margin-top: 0;
-      display: flex;
-      width: 100%;
-      align-items: center;
-
-      &>span{
-        width: 1em;
-      }
-
-      &>input{
-        width: 100%;
-        background-color: vars.$bg;
-        margin-left: 4px;
-        border: 1px solid black;
-        border-radius: 6px;
-        padding: 4px 8px;
-        box-sizing: border-box;
-        height: 2em;
-        outline: none;
-      }
-    }
+  display: grid;
+  grid-template-columns: 3fr 4fr;
+  align-items: center;
+  &>p{
+    margin: 0;
   }
-
-
 }

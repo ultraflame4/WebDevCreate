@@ -1,6 +1,6 @@
 import {defineComponent} from "@/core";
 import "@/assets/components/DropdownMenu.scss"
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 interface DropdownMenuProps {
     options: string[];
@@ -35,13 +35,19 @@ export const DropdownMenu = defineComponent<DropdownMenuProps>((props, context) 
 
     const [current,setCurrent] = useState<number>(props.defaultOption)
 
+    useEffect(() => {
+        if (current != props.defaultOption) {
+            setCurrent(props.defaultOption)
+        }
+    })
+
     function openMenu(ev: React.MouseEvent<HTMLDivElement>) {
         ev.currentTarget.classList.toggle("checked")
     }
 
     function selectItem(index: number) {
+        props.onSelect(props.options[index])
         setCurrent(index)
-        console.log("test")
     }
 
     return (

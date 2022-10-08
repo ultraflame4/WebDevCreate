@@ -1,5 +1,5 @@
 import {defineComponent, ObservableValue} from "@/core";
-import "@/assets/ContentSearch.scss"
+import "@/assets/components/ContentSearch.scss"
 import React, {useContext, useRef} from "react";
 
 export interface ISearchContextObj {

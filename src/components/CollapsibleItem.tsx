@@ -1,6 +1,6 @@
 import {defineComponent} from "@/core";
 import React, {useRef} from "react";
-import "@/assets/CollapsibleItem.scss"
+import "@/assets/components/CollapsibleItem.scss"
 
 
 

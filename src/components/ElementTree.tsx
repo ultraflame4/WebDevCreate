@@ -7,7 +7,7 @@ import {
 } from "@/core";
 
 import React, {useContext, useEffect, useRef, useState} from "react";
-import "@/assets/ElementTree.scss"
+import "@/assets/components/ElementTree.scss"
 import $ from "jquery";
 
 

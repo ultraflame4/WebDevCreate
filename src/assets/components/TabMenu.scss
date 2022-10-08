@@ -1,0 +1,42 @@
+@use "../variables.scss" as vars;
+
+.tabmenu-bar {
+
+  display: flex;
+  gap: 0.2em;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+
+  & > li {
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 0.6em;
+    margin: 0;
+    padding: 0.1em .4em;
+    font-size: 0.75em;
+    transition: all linear 150ms;
+    user-select: none;
+    font-weight: 600;
+    background: vars.$bg;
+    letter-spacing: 0.2px;
+
+    display: flex;
+
+
+    &:hover {
+      border-color: vars.$line-color;
+    }
+
+    &.checked {
+      border-color: transparent;
+
+      background: vars.$line-color-highlight;
+      color: white;
+
+
+    }
+
+  }
+}
+

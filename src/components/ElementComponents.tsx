@@ -1,5 +1,5 @@
 import {defineComponent, ElementComponent} from "@/core";
-import "@/assets/ElementComponents.scss"
+import "@/assets/components/ElementComponents.scss"
 import DragStartEvent = JQuery.DragStartEvent;
 import React, {useContext, useEffect, useState} from "react";
 import {it} from "node:test";

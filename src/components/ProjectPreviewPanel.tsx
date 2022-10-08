@@ -1,6 +1,6 @@
 import {defineComponent, ProjectBuilderContext} from "@/core";
 import {useContext, useEffect, useRef, useState} from "react";
-import "@/assets/ProjectPreview.scss"
+import "@/assets/components/ProjectPreview.scss"
 
 export default defineComponent((props, context) => {
     const rootRef = useRef<HTMLDivElement>(null);

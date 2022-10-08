@@ -1,8 +1,15 @@
-import {defineComponent, IProjectBuilderContext, ProjectBuilderContext, useObservableValue} from "@/core";
+import {
+    defineComponent,
+    IProjectBuilderContext,
+    ObservableValue,
+    ProjectBuilderContext,
+    useObservableValue
+} from "@/core";
 import React, {PropsWithChildren, useContext, useEffect, useRef} from "react";
 
-import "@/assets/Inspector.scss"
+import "@/assets/components/Inspector.scss"
 import CollapsibleItem from "@/components/CollapsibleItem";
+import {TabMenuBar, TabMenuCtx} from "@/components/TabMenu";
 
 interface InspectorItemProps {
     currentElement: Element
@@ -22,7 +29,6 @@ export function defineInspectorItem(name: string, component: React.FunctionCompo
     })
     return component
 }
-
 
 
 export const Inspector = defineComponent((props, context) => {
@@ -47,9 +53,9 @@ export const Inspector = defineComponent((props, context) => {
             {
                 InspectorItems.map((value, index) => {
                     return (
-                        <li>
-                            <CollapsibleItem title={value.title}>
-                                {React.createElement(value.component,{
+                        <li key={index}>
+                            <CollapsibleItem title={value.title} >
+                                {React.createElement(value.component, {
                                     builderCtx: projectCtx,
                                     currentElement: currentElement
                                 })}
@@ -61,6 +67,30 @@ export const Inspector = defineComponent((props, context) => {
             }
 
         </ul>
+    )
+})
+
+
+export const ElementPosition = defineInspectorItem("Position", (props, context) => {
+    const ctxObj = {
+        tab_names:new ObservableValue<string[]>(["static","relative","fixed","absolute","sticky"]),
+        opened_tab: new ObservableValue<number>(0)
+    }
+
+
+
+    return (
+        <div className={"inspector-el-position"}>
+            <TabMenuCtx.Provider value={ctxObj}>
+                <TabMenuBar style={{fontSize:"0.8em"}}/>
+            </TabMenuCtx.Provider>
+            <ul>
+                <li><span>x</span> <input type={"number"}/></li>
+                <li><span>y</span> <input type={"number"}/></li>
+
+            </ul>
+
+        </div>
     )
 })
 

@@ -33,13 +33,11 @@ const DropdownMenuItem = defineComponent<DropdownMenuItemProps>((props, context)
  */
 export const DropdownMenu = defineComponent<DropdownMenuProps>((props, context) => {
 
-    const [current,setCurrent] = useState<number>(props.defaultOption)
+    const [current, setCurrent] = useState<number>(props.defaultOption)
 
     useEffect(() => {
-        if (current != props.defaultOption) {
-            setCurrent(props.defaultOption)
-        }
-    })
+        setCurrent(props.defaultOption)
+    }, [props.defaultOption])
 
     function openMenu(ev: React.MouseEvent<HTMLDivElement>) {
         ev.currentTarget.classList.toggle("checked")

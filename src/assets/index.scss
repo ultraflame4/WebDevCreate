@@ -1,6 +1,6 @@
+@use "variables.scss" as vars;
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,200');
-
 
 body {
   margin: 0;
@@ -19,4 +19,44 @@ body {
 ::-webkit-scrollbar-thumb {
   background: black;
   border-radius: 4px;
+}
+
+input{
+  border: 1px solid vars.$line-color;
+  border-radius: 0.5em;
+  outline-color: vars.$line-color-highlight;
+  padding: 0 0.5em;
+  height: 24px;
+  box-sizing: border-box;
+
+
+  &::placeholder{
+    font-weight: 600;
+    font-size: 1em;
+    color: rgba(0, 0, 0, 0.29);
+  }
+
+  &:invalid{
+    outline-color: vars.$danger;
+    animation: shake linear 70ms 3;
+  }
+}
+
+@keyframes shake {
+  0%{
+    transform: translateX(0px);
+  }
+  25%{
+    transform: translateX(-3px);
+  }
+  50%{
+    transform: translateX(0px);
+  }
+  75%{
+    transform: translateX(3px);
+  }
+  100%{
+    transform: translateX(0px);
+  }
+
 }

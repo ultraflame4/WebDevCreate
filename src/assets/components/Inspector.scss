@@ -8,6 +8,7 @@
   overflow: auto;
   list-style: none;
   padding: 0 0.4em;
+
   margin: 0;
 
 
@@ -39,7 +40,7 @@
     height: 2ch;
   }
 
-  p{
+  p {
     margin: 0;
     font-size: 0.8em;
   }
@@ -85,11 +86,26 @@ textarea.inspector-el-text {
   }
 }
 
-.inspector-el-dimensions{
+.inspector-layout {
   display: grid;
-  grid-template-columns: 3fr 4fr;
+  grid-template-columns: 2fr 3fr;
   align-items: center;
-  &>p{
+}
+
+.inspector-el-dimensions {
+  @extend .inspector-layout;
+
+  & > p {
     margin: 0;
   }
+}
+
+
+.inspector-el-names {
+  @extend .inspector-layout;
+
+  & > input {
+    width: 100%;
+  }
+
 }

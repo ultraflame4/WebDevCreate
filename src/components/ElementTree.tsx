@@ -38,8 +38,14 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
     const context = useContext(ElementTreeCtx)
     const appContext = useContext(ProjectBuilderContext)
     const [children, setChildren] = useState(new Array<Element>())
+    const [elementName, setElementName] = useState<string>("")
 
     useEffect(() => {
+        setElementName(props.el.id)
+    },[props.el])
+
+    useEffect(() => {
+
 
         if (children.length !== props.el.childElementCount) {
             setChildren(getHtmlChildrenArray(props.el))
@@ -47,14 +53,15 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
         }
 
         const observer = new MutationObserver((mutations) => {
-
             setChildren(getHtmlChildrenArray(props.el))
+            setElementName(props.el.id)
         })
+
         observer.observe(
             props.el,
             {
                 childList: true,
-                attributes: false,
+                attributes: true,
                 subtree: false
             }
         )
@@ -215,7 +222,7 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
                         <span style={{width: "12px"}}></span>
                 }
 
-                {props.el.id.length < 1 ? <i className={"unnamed"}>{props.el.tagName.toLowerCase()}</i> : props.el.id}
+                {elementName.length < 1 ? <i className={"unnamed"}>{props.el.tagName.toLowerCase()}</i> : elementName}
                 <span className={"tagname"}>&lt;{props.el.tagName.toLowerCase()}&gt;</span>
             </p>
             <ul>

@@ -36,6 +36,7 @@
 
   #icon-close {
     display: none;
+
   }
 }
 
@@ -44,17 +45,12 @@
   user-select: none;
   flex-shrink: 0;
   position: absolute;
-  right: 2px;
+  right: 0.2em;
   animation: icon-entry ease 500ms;
 
 }
 
 .searchbar-input {
-
-  &::placeholder{
-    font-weight: 700;
-    color: rgba(0, 0, 0, 0.3);
-  }
 
   &:not(.opened) {
     width: 0;
@@ -64,7 +60,7 @@
 
   }
 
-  $side-padding: 10px;
+  $side-padding: 0.5em;
   box-sizing: border-box;
   flex-shrink: 0;
 
@@ -75,9 +71,7 @@
     left: $side-padding;
   };
 
-
-  border: none;
-  outline: 1px solid black;
+  height: 100%;
 
   width: 200px;
   border-radius: 1em;

@@ -9,7 +9,6 @@ import React, {PropsWithChildren, useContext, useEffect, useRef} from "react";
 
 import "@/assets/components/Inspector.scss"
 import CollapsibleItem from "@/components/CollapsibleItem";
-import {TabMenuBar, TabMenuCtx} from "@/components/TabMenu";
 import {DropdownMenu} from "@/components/DropdownMenu";
 
 interface InspectorItemProps {
@@ -55,7 +54,7 @@ export const Inspector = defineComponent((props, context) => {
                 InspectorItems.map((value, index) => {
                     return (
                         <li key={index}>
-                            <CollapsibleItem title={value.title} >
+                            <CollapsibleItem title={value.title}>
                                 {React.createElement(value.component, {
                                     builderCtx: projectCtx,
                                     currentElement: currentElement
@@ -71,31 +70,56 @@ export const Inspector = defineComponent((props, context) => {
     )
 })
 
+export const ElementName = defineInspectorItem("Name & Classes", (props, context) => {
+    const inRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (!inRef.current) return;
+        inRef.current.value = props.currentElement.id;
+    })
+
+    function changeName(e: React.ChangeEvent<HTMLInputElement>) {
+        let text = e.target.value
+        if (text.includes(" "))
+            return
+
+        props.currentElement.id = text;
+    }
+
+
+    return (
+        <div className={"inspector-el-names"}>
+            <h2>Name</h2>
+            <input placeholder={"unnamed"} type={"text"} pattern={"[^\\s]*"} onChange={changeName} ref={inRef}/>
+        </div>
+    )
+})
 
 export const ElementDimensions = defineInspectorItem("Dimensions", (props, context) => {
 
     const positionTypes = [
-        "static","relative","absolute","sticky","fixed"
+        "static", "relative", "absolute", "sticky", "fixed"
     ]
     let currentElement = props.currentElement as HTMLElement
 
     let posStyle = currentElement.style.position.trim()
-    let elementPosition = (posStyle.length<1?"static":posStyle)
+    let elementPosition = (posStyle.length < 1 ? "static" : posStyle)
 
     // @ts-ignore
-    if (props.currentElement.style === undefined){
+    if (props.currentElement.style === undefined) {
         return <></>
     }
 
     function handlePositionTypeSelect(data: string) {
-        currentElement.style.position=data
+        currentElement.style.position = data
 
     }
 
     return (
         <div className={"inspector-el-dimensions"}>
             <h2>Position type</h2>
-            <DropdownMenu onSelect={handlePositionTypeSelect} options={positionTypes} defaultOption={positionTypes.indexOf(elementPosition)}/>
+            <DropdownMenu onSelect={handlePositionTypeSelect} options={positionTypes}
+                          defaultOption={positionTypes.indexOf(elementPosition)}/>
 
         </div>
     )

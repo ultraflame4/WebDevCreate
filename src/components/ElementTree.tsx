@@ -107,9 +107,7 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
     }
 
     function OnDragOver(ev: React.DragEvent<HTMLLIElement>) {
-        if (props.is_root) {
-            return;
-        }
+
         ev.preventDefault();
         ev.stopPropagation()
 
@@ -127,11 +125,16 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
             return;
         }
         let jEl = $(rootRef.current);
+
+        if (props.is_root) {
+            itemRef.current.classList.add("drag-over-center");
+            return;
+        }
+
         const {y} = getRelativeCoords(rootRef.current, ev.pageX, ev.pageY)
 
         if (y < 10) { // insert sibling before
             itemRef.current.classList.add("drag-over-before");
-
         }
         //@ts-ignore
         else if (y > jEl.height() - 10) { // insert after

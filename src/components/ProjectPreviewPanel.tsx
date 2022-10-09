@@ -23,7 +23,7 @@ export default defineComponent((props, context) => {
             console.error("Cannot get project preview panel iframe!")
             return
         }
-        if (!iframeRef.current.contentWindow){
+        if (!iframeRef.current.contentWindow) {
             console.error("Cannot get project preview panel iframe content window!")
             return
         }

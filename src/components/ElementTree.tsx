@@ -16,7 +16,8 @@ interface IElementTreeProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 interface IElementTreeItemProps extends React.HTMLAttributes<HTMLLIElement> {
-    el: Element
+    el: Element,
+    is_root?: 1 | 0
 }
 
 export interface IElementTreeCtxObj {
@@ -99,8 +100,10 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
     }
 
     function OnDragOver(ev: React.DragEvent<HTMLLIElement>) {
-
-        ev.preventDefault()
+        if (props.is_root) {
+            return;
+        }
+        ev.preventDefault();
         ev.stopPropagation()
 
         if (itemRef.current === null) {
@@ -243,7 +246,7 @@ export default defineComponent<IElementTreeProps>((props, context) => {
         <ElementTreeCtx.Provider value={CreateElementTreeCtxObj()}>
 
             <ul className={"element-tree"}>
-                <ElementTreeItem el={props.root_element}/>
+                <ElementTreeItem el={props.root_element} is_root={1}/>
             </ul>
 
         </ElementTreeCtx.Provider>

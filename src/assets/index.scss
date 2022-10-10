@@ -9,8 +9,13 @@ body {
 * {
   font-family: "Poppins";
   min-height: 0;
+  background: inherit;
+
 }
 
+span{
+  background: transparent;
+}
 
 ::-webkit-scrollbar {
   width: 4px;

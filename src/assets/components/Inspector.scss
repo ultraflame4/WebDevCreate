@@ -90,6 +90,7 @@ textarea.inspector-el-text {
   display: grid;
   grid-template-columns: 2fr 3fr;
   align-items: center;
+  row-gap: 1em;
 }
 
 .inspector-el-dimensions {
@@ -106,6 +107,11 @@ textarea.inspector-el-text {
 
   & > input {
     width: 100%;
+  }
+
+  &>.class-list{
+    grid-column: 1 / -1;
+    max-height: 150px;
   }
 
 }

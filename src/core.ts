@@ -48,7 +48,7 @@ export function getHtmlChildrenArray(el: Element) {
 
 
 /**
- * Returns adjusted mouse coordinates relative to the center of element
+ * Returns adjusted mouse coordinates relative to the top of element
  * @param el Element
  * @param pageX mouse coordinate x relative to the page
  * @param pageY mouse coordinate y relative to the page
@@ -66,6 +66,20 @@ export function getRelativeCoords(el: Element, pageX: number, pageY: number): { 
     // @ts-ignore
     let _y = pageY - offset.top;
     return {x: _x, y: _y}
+}
+
+/**
+ * Returns adjusted mouse coordinates relative to the top of element in percentage 0.1, 0.2 ,0.3 ...
+ * @param el Element
+ * @param pageX mouse coordinate x relative to the page
+ * @param pageY mouse coordinate y relative to the page
+ */
+export function getRelativePercentCoords(el: Element, pageX: number, pageY: number): { x: number, y: number } {
+    const data = getRelativeCoords(el, pageX, pageY)
+    return {
+        x: data.x / el.clientWidth,
+        y: data.y / el.clientHeight
+    }
 }
 
 export interface ElementComponent {
@@ -87,6 +101,7 @@ export interface IProjectBuilderContext {
 }
 
 export const ProjectBuilderContext = React.createContext<IProjectBuilderContext | null>(null)
+
 
 export class ObservableValue<T> {
     private _value: T
@@ -115,6 +130,7 @@ export class ObservableValue<T> {
 }
 
 
+
 export function useObservableValue<T>(observableValue: ObservableValue<T> | null | undefined): T | null {
     if (!observableValue) {
         return null;
@@ -130,4 +146,14 @@ export function useObservableValue<T>(observableValue: ObservableValue<T> | null
         return () => observableValue.unsubscribe(listener)
     })
     return value
+}
+
+export function mouseInElements(mouseX: number, mouseY: number, elements: HTMLElement[]) {
+    for (let element of elements) {
+        let rect = element.getBoundingClientRect()
+        if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
+            return element
+        }
+    }
+    return null
 }

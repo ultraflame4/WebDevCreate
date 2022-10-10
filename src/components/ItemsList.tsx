@@ -7,7 +7,7 @@ import {now} from "jquery";
 export interface ItemListAdapterData<T> {
     items: T[]
     itemCreator: () => T
-    factory: (item: T, index: number, items: T[]) => React.ReactElement | string,
+    factory: (item: T, index: number, items: T[], setItems: (newArray:T[])=>void) => React.ReactElement | string,
     itemsUpdate: (updatedItems:T[])=>void
 
 }
@@ -114,12 +114,16 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
 
     useEffect(() => {
         setItems(props.data.items)
-    }, props.data.items)
+    }, [props.data.items])
+
+    function updateItemsList(newArray:any[]) {
+        setItems(newArray)
+        props.data.itemsUpdate(newArray)
+    }
 
     function addItem() {
         let newArray = [...items, props.data.itemCreator()]
-        setItems(newArray)
-        props.data.itemsUpdate(newArray)
+        updateItemsList(newArray)
     }
 
     function moveItem(item_: HTMLElement, fromIndex: number, toIndex: number) {
@@ -138,8 +142,7 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
             newItems.splice(fromIndex, 1)
         }
 
-        props.data.itemsUpdate(newItems)
-        setItems([...newItems])
+        updateItemsList(newItems)
     }
 
     return (
@@ -158,7 +161,7 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
                                 return (
                                     <ItemsListAdapterItem key={index} item_move={moveItem} items_movable={itemsMovable}>
                                         {
-                                            props.data.factory(value, index, array)
+                                            props.data.factory(value, index, array, updateItemsList)
                                         }
                                     </ItemsListAdapterItem>
                                 )

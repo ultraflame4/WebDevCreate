@@ -1,6 +1,32 @@
 import React, {useEffect, useRef} from "react";
 import {defineInspectorItem} from "@/components/Inspector";
 import {defData, ItemsListAdapter} from "@/components/ItemsList";
+import {defineComponent} from "@/core";
+
+const ClasslistItem =
+    defineComponent<{
+        itemsetter: React.Dispatch<React.SetStateAction<string[]>>,
+        itemval: string,
+        itemindex: number,
+        itemarray:string[]
+    }>
+
+    ((props) => {
+        const inputRef = useRef<HTMLInputElement>(null)
+        useEffect(() => {
+            if (inputRef.current) {
+                inputRef.current.value = props.itemval
+            }
+        }, [props.itemval])
+
+        function update(e:React.ChangeEvent<HTMLInputElement>) {
+            let a = props.itemarray
+            a[props.itemindex] = e.target.value
+            props.itemsetter(a)
+        }
+
+        return <input type={"text"} ref={inputRef} onChange={update}/>
+    })
 
 export const ElementName = defineInspectorItem("Name & Classes", (props, context) => {
     const inRef = useRef<HTMLInputElement>(null)
@@ -29,12 +55,16 @@ export const ElementName = defineInspectorItem("Name & Classes", (props, context
                 itemsMovable={true}
                 data={defData<string>(
                     {
-                        items: ["test", "a", "b", "c", "d"],
-                        itemCreator: () => "d",
-                        factory: (item, index, array) => {
-                            return item
+                        items: Array.from(props.currentElement.classList),
+                        itemCreator: () => "",
+                        factory: (item, index, array, setItems) => {
+
+
+                            return <ClasslistItem itemsetter={setItems} itemval={item} itemindex={index} itemarray={array}/>
                         },
                         itemsUpdate(updatedItems: string[]): void {
+                            props.currentElement.className = updatedItems.join(" ");
+
                         }
                     })}
             />

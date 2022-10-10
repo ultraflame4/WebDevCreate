@@ -26,14 +26,15 @@ export const ElementName = defineInspectorItem("Name & Classes", (props, context
             <ItemsListAdapter
                 className={"class-list"}
                 title={"Classes"}
+                itemsMovable={true}
                 data={defData<string>(
                     {
                         items: ["test", "a", "b", "c", "d"],
                         itemCreator: () => "d",
                         factory: (item, index, array) => {
-
-                            console.log(item, "d")
                             return item
+                        },
+                        itemsUpdate(updatedItems: string[]): void {
                         }
                     })}
             />

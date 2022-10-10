@@ -8,6 +8,8 @@ export interface ItemListAdapterData<T> {
     items: T[]
     itemCreator: () => T
     factory: (item: T, index: number, items: T[]) => React.ReactElement | string,
+    itemsUpdate: (updatedItems:T[])=>void
+
 }
 
 export function defData<T>(data: ItemListAdapterData<T>) {
@@ -17,6 +19,7 @@ export function defData<T>(data: ItemListAdapterData<T>) {
 interface ItemListAdapterProps extends HTMLAttributes<HTMLDivElement> {
     title: string,
     data: ItemListAdapterData<any>
+    itemsMovable?: boolean,
 }
 
 const SelectedContext = React.createContext<{ selected: HTMLElement | null, dragging: null | HTMLElement, dragOver: HTMLElement | null }>({
@@ -27,6 +30,7 @@ const SelectedContext = React.createContext<{ selected: HTMLElement | null, drag
 
 const ItemsListAdapterItem = defineComponent<{
     item_move: (item: HTMLElement, fromIndex: number, toIndex: number) => void,
+    items_movable: boolean
 }>((props, context) => {
     const ctx = useContext(SelectedContext)
     const itemRef = React.useRef<HTMLLIElement>(null)
@@ -57,9 +61,8 @@ const ItemsListAdapterItem = defineComponent<{
                 let topbottom = ctx.dragOver.getAttribute("data-drag-over")
                 let dragOverIndex = Array.from(ctx.dragOver.parentElement!.children).indexOf(ctx.dragOver)
 
-                let EndIndex = topbottom==="top"?dragOverIndex:dragOverIndex+1;
+                let EndIndex = topbottom === "top" ? dragOverIndex : dragOverIndex + 1;
 
-                console.log("end index", EndIndex,"drag-over-index", ctx.dragOver.textContent, "topbottom", topbottom)
                 // update items array in parent element
                 props.item_move(element, elementIndex, EndIndex)
 
@@ -101,26 +104,27 @@ const ItemsListAdapterItem = defineComponent<{
 
     return <li onClick={selectItem} ref={itemRef}>
         <div>{props.children}</div>
-        <span className="material-symbols-outlined" onMouseDown={startDrag}>drag_indicator</span>
+        {props.items_movable ? <span className="material-symbols-outlined" onMouseDown={startDrag}>drag_indicator</span>:""}
     </li>
 })
 
 export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, context) => {
     const [items, setItems] = useState(props.data.items);
+    let itemsMovable = props.itemsMovable ?? false
 
     useEffect(() => {
         setItems(props.data.items)
     }, props.data.items)
 
     function addItem() {
-        setItems([...items, props.data.itemCreator()])
-
+        let newArray = [...items, props.data.itemCreator()]
+        setItems(newArray)
+        props.data.itemsUpdate(newArray)
     }
 
     function moveItem(item_: HTMLElement, fromIndex: number, toIndex: number) {
         let newItems = [...items]
         let item = newItems[fromIndex]
-        console.log("item", item)
 
         if (newItems.length <= toIndex) {
             newItems.push(item)
@@ -128,18 +132,16 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
             newItems.splice(toIndex, 0, item)
         }
 
-        if (toIndex<fromIndex){
-            newItems.splice(fromIndex+1, 1)
-        }
-        else{
+        if (toIndex < fromIndex) {
+            newItems.splice(fromIndex + 1, 1)
+        } else {
             newItems.splice(fromIndex, 1)
         }
 
-        console.log(newItems, fromIndex, toIndex);
+        props.data.itemsUpdate(newItems)
         setItems([...newItems])
     }
 
-    console.log(items)
     return (
         <div {...props}>
             <div className={"component-itemslistadapter-titlebar"}>
@@ -154,7 +156,7 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
                             items.map((value, index, array) => {
 
                                 return (
-                                    <ItemsListAdapterItem key={index} item_move={moveItem}>
+                                    <ItemsListAdapterItem key={index} item_move={moveItem} items_movable={itemsMovable}>
                                         {
                                             props.data.factory(value, index, array)
                                         }

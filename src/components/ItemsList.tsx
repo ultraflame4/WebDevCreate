@@ -1,11 +1,13 @@
 import {defineComponent, getRelativeCoords, getRelativePercentCoords, mouseInElements, ObservableValue} from "@/core";
-import React, {HTMLAttributes, useContext, useEffect, useState} from "react";
+import React, {HTMLAttributes, useContext, useEffect, useRef, useState} from "react";
 import "@/assets/components/ItemsListAdapter.scss"
+import ScrollEvent = JQuery.ScrollEvent;
+import {now} from "jquery";
 
 export interface ItemListAdapterData<T> {
     items: T[]
     itemCreator: () => T
-    factory: (item: T, index: number, items: T[], setArray: React.Dispatch<React.SetStateAction<T[]>>) => React.ReactElement | string,
+    factory: (item: T, index: number, items: T[]) => React.ReactElement | string,
 }
 
 export function defData<T>(data: ItemListAdapterData<T>) {
@@ -17,13 +19,15 @@ interface ItemListAdapterProps extends HTMLAttributes<HTMLDivElement> {
     data: ItemListAdapterData<any>
 }
 
-const SelectedContext = React.createContext<{ selected: HTMLElement | null, dragging:  null|HTMLElement, dragOver: HTMLElement|null }>({
+const SelectedContext = React.createContext<{ selected: HTMLElement | null, dragging: null | HTMLElement, dragOver: HTMLElement | null }>({
     selected: null,
     dragging: null,
     dragOver: null
 })
 
-const ItemsListAdapterItem = defineComponent((props, context) => {
+const ItemsListAdapterItem = defineComponent<{
+    item_move: (item: HTMLElement, fromIndex: number, toIndex: number) => void,
+}>((props, context) => {
     const ctx = useContext(SelectedContext)
     const itemRef = React.useRef<HTMLLIElement>(null)
 
@@ -42,31 +46,42 @@ const ItemsListAdapterItem = defineComponent((props, context) => {
     function startDrag() {
         if (!itemRef.current) return;
         let element = itemRef.current;
+        let elementIndex = Array.from(element.parentElement!.children).indexOf(element)
         document.addEventListener("mousemove", mousemove)
         document.addEventListener("mouseup", ev => {
             // on drag finish
             document.removeEventListener("mousemove", mousemove)
+            element.removeAttribute("style")
 
-            element.style.position="static"
-            element.style.top="0"
-            if(ctx.dragOver) {
+            if (ctx.dragOver) {
                 let topbottom = ctx.dragOver.getAttribute("data-drag-over")
-                ctx.dragOver.insertAdjacentElement(topbottom==="top"?"beforebegin":"afterend", element)
+                let dragOverIndex = Array.from(ctx.dragOver.parentElement!.children).indexOf(ctx.dragOver)
+
+                let EndIndex = topbottom==="top"?dragOverIndex:dragOverIndex+1;
+
+                console.log("end index", EndIndex,"drag-over-index", ctx.dragOver.textContent, "topbottom", topbottom)
+                // update items array in parent element
+                props.item_move(element, elementIndex, EndIndex)
+
             }
             element.classList.remove("dragging")
             ctx.dragOver?.removeAttribute("data-drag-over")
-            ctx.dragOver=null
+            ctx.dragOver = null
+
 
         }, {once: true})
-        let box = element.parentElement!.getBoundingClientRect()
-        let offset = box.top + element.getBoundingClientRect().height/2
-        function mousemove(ev:MouseEvent) {
 
-            element.style.position= "absolute"
+
+        function mousemove(ev: MouseEvent) {
+            let box = element.parentElement!.getBoundingClientRect()
+            let offset = box.top + element.getBoundingClientRect().height / 2
+
+
+            element.style.position = "absolute"
             element.style.top = `${ev.clientY - offset}px`
             element.classList.add("dragging")
             let siblings = Array.from(element.parentElement!.children) as HTMLElement[]
-            siblings = siblings.filter(el=>el!==element)
+            siblings = siblings.filter(el => el !== element)
             let el = mouseInElements(ev.clientX, ev.clientY, siblings)
 
             if (el) {
@@ -74,9 +89,9 @@ const ItemsListAdapterItem = defineComponent((props, context) => {
 
                 ctx.dragOver?.removeAttribute("data-drag-over")
                 ctx.dragOver = el
+
                 el.setAttribute("data-drag-over", y > 0.5 ? "bottom" : "top")
-            }
-            else{
+            } else {
                 // ctx.dragOver?.classList.remove("drag-over")
                 // ctx.dragOver = null
             }
@@ -99,9 +114,32 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
 
     function addItem() {
         setItems([...items, props.data.itemCreator()])
+
     }
 
+    function moveItem(item_: HTMLElement, fromIndex: number, toIndex: number) {
+        let newItems = [...items]
+        let item = newItems[fromIndex]
+        console.log("item", item)
 
+        if (newItems.length <= toIndex) {
+            newItems.push(item)
+        } else {
+            newItems.splice(toIndex, 0, item)
+        }
+
+        if (toIndex<fromIndex){
+            newItems.splice(fromIndex+1, 1)
+        }
+        else{
+            newItems.splice(fromIndex, 1)
+        }
+
+        console.log(newItems, fromIndex, toIndex);
+        setItems([...newItems])
+    }
+
+    console.log(items)
     return (
         <div {...props}>
             <div className={"component-itemslistadapter-titlebar"}>
@@ -109,16 +147,25 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
                 <span className="material-symbols-outlined tools-item" title={"Add item to list"}
                       onClick={addItem}>add</span>
             </div>
-            <ul className={"component-itemslistadapter"}>
-                <SelectedContext.Provider value={{selected: null, dragging: null,dragOver:null}}>
-                    {
-                        items.map((value, index) => <ItemsListAdapterItem key={index}>{
-                            props.data.factory(value, index, items, setItems)
-                        }
-                        </ItemsListAdapterItem>)}
-                </SelectedContext.Provider>
+            <div>
+                <ul className={"component-itemslistadapter"}>
+                    <SelectedContext.Provider value={{selected: null, dragging: null, dragOver: null}}>
+                        {
+                            items.map((value, index, array) => {
 
-            </ul>
+                                return (
+                                    <ItemsListAdapterItem key={index} item_move={moveItem}>
+                                        {
+                                            props.data.factory(value, index, array)
+                                        }
+                                    </ItemsListAdapterItem>
+                                )
+                            })
+                        }
+                    </SelectedContext.Provider>
+
+                </ul>
+            </div>
         </div>
     );
 })

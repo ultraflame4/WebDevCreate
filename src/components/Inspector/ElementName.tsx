@@ -28,9 +28,13 @@ export const ElementName = defineInspectorItem("Name & Classes", (props, context
                 title={"Classes"}
                 data={defData<string>(
                     {
-                        items: ["test","a","a","a","a"],
+                        items: ["test", "a", "b", "c", "d"],
                         itemCreator: () => "d",
-                        factory: (item, index) => item
+                        factory: (item, index, array) => {
+
+                            console.log(item, "d")
+                            return item
+                        }
                     })}
             />
         </div>

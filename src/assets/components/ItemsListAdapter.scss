@@ -1,6 +1,6 @@
 @use "@/assets/variables.scss" as vars;
 
-*:has(>.component-itemslistadapter){
+*:has(>div>.component-itemslistadapter){
   border: 1px solid vars.$line-color;
   border-radius: 8px;
 
@@ -10,7 +10,12 @@
   max-height: 200px;
   overflow: hidden;
 
+  &>div:nth-of-type(2){
+    overflow: auto;
+    height: 100%;
+  }
 }
+
 .component-itemslistadapter-titlebar{
   display: flex;
 
@@ -50,9 +55,9 @@
 .component-itemslistadapter{
   list-style: none;
 
-  height: 100%;
+  height: fit-content;
   box-sizing: border-box;
-  overflow: auto;
+
   position: relative;
   padding: 0.1em;
 
@@ -83,7 +88,7 @@
     border-radius: 6px;
 
     border: 2px solid transparent;
-    transition: filter ease-in 100ms;
+    transition: margin-bottom ease 100ms, margin-top ease 100ms, filter ease-in 100ms;
 
     &.selected{
       border-color: vars.$line-color-highlight;
@@ -95,11 +100,12 @@
 
     }
 
+
     &[data-drag-over="top"]{
-      margin-top: 24px;
+      margin-top: 32px;
     }
     &[data-drag-over="bottom"]{
-      margin-bottom: 24px;
+      margin-bottom: 32px;
     }
   }
 }

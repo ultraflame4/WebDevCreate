@@ -54,6 +54,7 @@ export const Inspector = defineComponent((props, context) => {
         <ul className={"inspector-items"}>
             {
                 InspectorItems.map((value, index) => {
+
                     return (
                         <li key={index}>
                             <CollapsibleItem title={value.title}>

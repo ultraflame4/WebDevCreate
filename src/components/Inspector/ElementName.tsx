@@ -5,7 +5,7 @@ import {defineComponent} from "@/core";
 
 const ClasslistItem =
     defineComponent<{
-        itemsetter: React.Dispatch<React.SetStateAction<string[]>>,
+        itemsetter: (newArray:string[])=>void,
         itemval: string,
         itemindex: number,
         itemarray:string[]

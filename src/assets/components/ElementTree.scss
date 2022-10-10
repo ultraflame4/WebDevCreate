@@ -9,7 +9,8 @@
 
   ul {
     list-style: none;
-    padding-left: 12px;
+    margin-left: 12px;
+    padding-left: 1px;
     position: relative;
 
     z-index: 1;
@@ -17,7 +18,7 @@
       content: "";
       display: block;
       position: absolute;
-      left: 12px;
+      left: 0;
       top: 0;
       height: 100%;
       width: 1px;

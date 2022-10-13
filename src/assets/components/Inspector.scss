@@ -114,4 +114,11 @@ textarea.inspector-el-text {
     max-height: 150px;
   }
 
+  .inspector-el-classlist-item {
+    width: 100%;
+    &:not(:hover){
+      border-color: transparent;
+    }
+
+  }
 }

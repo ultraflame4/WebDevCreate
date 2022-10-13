@@ -5,7 +5,7 @@ import {defineInspectorItem} from "@/inspector";
 
 const ClasslistItem =
     defineComponent<{
-        itemsetter: (newArray:string[])=>void,
+        itemsetter: React.Dispatch<React.SetStateAction<string[]>>,
         itemval: string,
         itemindex: number,
         itemarray:string[]
@@ -20,12 +20,15 @@ const ClasslistItem =
         }, [props.itemval])
 
         function update(e:React.ChangeEvent<HTMLInputElement>) {
-            let a = props.itemarray
-            a[props.itemindex] = e.target.value
-            props.itemsetter(a)
+            props.itemsetter(prevState => {
+
+                let classlist = [...prevState]
+                classlist[props.itemindex] = e.target.value
+                return classlist
+            })
         }
 
-        return <input type={"text"} ref={inputRef} onChange={update} className={"inspector-el-classlist-item"}/>
+        return <input type={"text"} ref={inputRef} onChange={update} className={"inspector-el-classlist-item"} placeholder={"empty"}/>
     })
 
 export const ElementName = defineInspectorItem("Name & Classes", (props, context) => {

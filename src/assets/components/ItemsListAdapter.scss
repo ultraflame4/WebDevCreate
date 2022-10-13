@@ -11,6 +11,7 @@
   min-height: 50px;
   overflow: hidden;
 
+
   &>div:nth-of-type(2){
     overflow: auto;
     height: 100%;
@@ -28,15 +29,18 @@
 
   &>.tools-item:nth-of-type(1){
     margin-left: auto;
+    --highlight: #{vars.$danger};
   }
 
   &>.tools-item{
+    --highlight: #{vars.$line-color-highlight};
+
     user-select: none;
     cursor: pointer;
 
     transition: color linear 100ms;
     &:hover{
-      color: vars.$line-color-highlight;
+      color: var(--highlight);
     }
 
     &:active{
@@ -60,21 +64,23 @@
   box-sizing: border-box;
 
   position: relative;
-  padding: 0.1em;
+  padding: 0.5em 0.1em;
 
   &>li {
+    --side-margin: 0.2em;
     display: flex;
-    margin: 0;
+    margin: 0 var(--side-margin);
     font-size: 0.85em;
-    padding: 0 0.25em;
+    padding: 0;
     user-select: none;
-    display: flex;
     align-items: center;
-    width: 100%;
+    width: calc(100% - var(--side-margin)*2);
     left: -0.1em;
+    gap: 0.5em;
 
     &>div{
-      height: 100%;
+      margin: auto 0;
+      height: calc(100% - 0.5em);
       flex-grow: 1;
     }
 

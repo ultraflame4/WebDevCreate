@@ -7,7 +7,7 @@ import {now} from "jquery";
 export interface ItemListAdapterData<T> {
     items: T[]
     itemCreator: () => T
-    factory: (item: T, index: number, items: T[], setItems: (newArray:T[])=>void) => React.ReactElement | string,
+    factory: (item: T, index: number, items: T[], setItems: React.Dispatch<React.SetStateAction<string[]>>) => React.ReactElement | string,
     itemsUpdate: (updatedItems:T[])=>void
 
 }
@@ -116,33 +116,42 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
         setItems(props.data.items)
     }, [props.data.items])
 
-    function updateItemsList(newArray:any[]) {
-        setItems(newArray)
-        props.data.itemsUpdate(newArray)
-    }
+    useEffect(() => {
+        props.data.itemsUpdate(items)
+    }, [items])
 
     function addItem() {
-        let newArray = [...items, props.data.itemCreator()]
-        updateItemsList(newArray)
+        setItems(prevState => {
+            return [...prevState, props.data.itemCreator()]
+        })
+    }
+    function removeItem() {
+        setItems(prevState => {
+            let newArray = [...prevState]
+            newArray.pop()
+            return newArray
+        })
     }
 
     function moveItem(item_: HTMLElement, fromIndex: number, toIndex: number) {
-        let newItems = [...items]
-        let item = newItems[fromIndex]
+        setItems(prevState => {
+            let newItems = [...prevState]
+            let item = newItems[fromIndex]
 
-        if (newItems.length <= toIndex) {
-            newItems.push(item)
-        } else {
-            newItems.splice(toIndex, 0, item)
-        }
+            if (newItems.length <= toIndex) {
+                newItems.push(item)
+            } else {
+                newItems.splice(toIndex, 0, item)
+            }
 
-        if (toIndex < fromIndex) {
-            newItems.splice(fromIndex + 1, 1)
-        } else {
-            newItems.splice(fromIndex, 1)
-        }
+            if (toIndex < fromIndex) {
+                newItems.splice(fromIndex + 1, 1)
+            } else {
+                newItems.splice(fromIndex, 1)
+            }
 
-        updateItemsList(newItems)
+            return newItems;
+        })
     }
 
     return (
@@ -150,7 +159,11 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
             <div className={"component-itemslistadapter-titlebar"}>
                 <p>{props.title}</p>
                 <span className="material-symbols-outlined tools-item" title={"Add item to list"}
+                      onClick={removeItem}>remove</span>
+
+                <span className="material-symbols-outlined tools-item" title={"Add item to list"}
                       onClick={addItem}>add</span>
+
             </div>
             <div>
                 <ul className={"component-itemslistadapter"}>
@@ -161,7 +174,7 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
                                 return (
                                     <ItemsListAdapterItem key={index} item_move={moveItem} items_movable={itemsMovable}>
                                         {
-                                            props.data.factory(value, index, array, updateItemsList)
+                                            props.data.factory(value, index, array, setItems)
                                         }
                                     </ItemsListAdapterItem>
                                 )

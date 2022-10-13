@@ -1,4 +1,4 @@
-import React from "react";
+import React, {createContext} from "react";
 import $ from "jquery"
 
 export function defineComponent<T>(component: React.FunctionComponent<React.PropsWithChildren<T>>): React.FunctionComponent<React.PropsWithChildren<T>> {
@@ -157,3 +157,20 @@ export function mouseInElements(mouseX: number, mouseY: number, elements: HTMLEl
     }
     return null
 }
+
+export interface IContextMenu_MenuObj {
+    name: string,
+    callback?: () => void,
+    children?: IContextMenu_MenuObj[]
+}
+
+export interface IContextMenu{
+    createMenu: (menu: IContextMenu_MenuObj) => void
+}
+
+const ContextMenu = React.createContext<IContextMenu>(
+    {
+        createMenu: (_: IContextMenu_MenuObj) => {console.log("No context menu defined")}
+    }
+)
+

@@ -165,12 +165,23 @@ export interface IContextMenu_MenuObj {
 }
 
 export interface IContextMenu{
-    createMenu: (menu: IContextMenu_MenuObj) => void
+    /**
+     * Creates and opens a context menu. Call this function when you want to open a context menu. e.g. on right click
+     * @param menu
+     */
+    createMenu: (menu: IContextMenu_MenuObj[]) => void
+
+    /**
+     * This is a callback function that is called when the context menu is opened.
+     * @param menu_data
+     */
+    onOpenMenu: (menu_data: IContextMenu_MenuObj[]) => void
 }
 
-const ContextMenu = React.createContext<IContextMenu>(
+export const ContextMenu = React.createContext<IContextMenu>(
     {
-        createMenu: (_: IContextMenu_MenuObj) => {console.log("No context menu defined")}
+        createMenu: (_: IContextMenu_MenuObj[]) => {console.log("No context menu defined")},
+        onOpenMenu: (_: IContextMenu_MenuObj[]) => {}
     }
 )
 

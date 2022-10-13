@@ -1,6 +1,6 @@
 import {DropdownMenu} from "@/components/DropdownMenu";
 import React from "react";
-import {defineInspectorItem} from "@/components/Inspector";
+import {defineInspectorItem} from "@/inspector";
 
 export const ElementDimensions = defineInspectorItem("Dimensions", (props, context) => {
 

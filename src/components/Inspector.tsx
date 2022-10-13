@@ -7,24 +7,7 @@ import {ElementName} from "@/components/Inspector/ElementName";
 import {ElementDimensions} from "@/components/Inspector/ElementDimensions";
 import {ElementText} from "@/components/Inspector/ElementText";
 import {ElementOptions} from "@/components/Inspector/ElementOptions";
-
-interface InspectorItemProps {
-    currentElement: Element
-    builderCtx: IProjectBuilderContext
-}
-
-type InspectorItem = {
-    title: string,
-    component: React.FunctionComponent<PropsWithChildren<InspectorItemProps>>
-}
-
-
-export function defineInspectorItem(name: string, component: React.FunctionComponent<React.PropsWithChildren<InspectorItemProps>>) {
-    return {
-        title: name,
-        component: component
-    }
-}
+import {InspectorItem} from "@/inspector";
 
 const InspectorItems: InspectorItem[] = [
     ElementName,

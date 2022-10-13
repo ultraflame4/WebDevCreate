@@ -1,5 +1,5 @@
 import React from "react";
-import {defineInspectorItem} from "@/components/Inspector";
+import {defineInspectorItem} from "@/inspector";
 
 export const ElementOptions = defineInspectorItem("Other options", (props, context) => {
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from "react";
-import {defineInspectorItem} from "@/components/Inspector";
 import {defData, ItemsListAdapter} from "@/components/ItemsList";
 import {defineComponent} from "@/core";
+import {defineInspectorItem} from "@/inspector";
 
 const ClasslistItem =
     defineComponent<{
@@ -25,7 +25,7 @@ const ClasslistItem =
             props.itemsetter(a)
         }
 
-        return <input type={"text"} ref={inputRef} onChange={update}/>
+        return <input type={"text"} ref={inputRef} onChange={update} className={"inspector-el-classlist-item"}/>
     })
 
 export const ElementName = defineInspectorItem("Name & Classes", (props, context) => {

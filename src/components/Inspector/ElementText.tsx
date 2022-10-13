@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from "react";
-import {defineInspectorItem} from "@/components/Inspector";
+import {defineInspectorItem} from "@/inspector";
 
 export const ElementText = defineInspectorItem("Text", (props, context) => {
     const txtAreaRef = useRef<HTMLTextAreaElement>(null)

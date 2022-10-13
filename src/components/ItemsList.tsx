@@ -22,8 +22,7 @@ interface ItemListAdapterProps extends HTMLAttributes<HTMLDivElement> {
     itemsMovable?: boolean,
 }
 
-const SelectedContext = React.createContext<{ selected: HTMLElement | null, dragging: null | HTMLElement, dragOver: HTMLElement | null }>({
-    selected: null,
+const SelectedContext = React.createContext<{ dragging: null | HTMLElement, dragOver: HTMLElement | null }>({
     dragging: null,
     dragOver: null
 })
@@ -34,18 +33,6 @@ const ItemsListAdapterItem = defineComponent<{
 }>((props, context) => {
     const ctx = useContext(SelectedContext)
     const itemRef = React.useRef<HTMLLIElement>(null)
-
-    function selectItem(e: React.MouseEvent<HTMLLIElement>) {
-        return;
-        ctx.selected?.classList.remove("selected")
-        if (ctx.selected === e.currentTarget) {
-            ctx.selected = null
-            return
-        }
-        ctx.selected = e.currentTarget
-        e.currentTarget.classList.add("selected")
-        console.log("dd")
-    }
 
     function startDrag() {
         if (!itemRef.current) return;
@@ -102,7 +89,7 @@ const ItemsListAdapterItem = defineComponent<{
         }
     }
 
-    return <li onClick={selectItem} ref={itemRef}>
+    return <li ref={itemRef}>
         <div>{props.children}</div>
         {props.items_movable ? <span className="material-symbols-outlined" onMouseDown={startDrag}>drag_indicator</span>:""}
     </li>
@@ -167,7 +154,7 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
             </div>
             <div>
                 <ul className={"component-itemslistadapter"}>
-                    <SelectedContext.Provider value={{selected: null, dragging: null, dragOver: null}}>
+                    <SelectedContext.Provider value={{dragging: null, dragOver: null}}>
                         {
                             items.map((value, index, array) => {
 

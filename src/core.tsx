@@ -163,9 +163,23 @@ export function mouseInElements(mouseX: number, mouseY: number, elements: HTMLEl
     return null
 }
 
+
 export interface IContextMenu_MenuObj {
-    name: string,
+    /**
+     * The text to display in the menu, optional
+     */
+    name?: string,
+    /**
+     * The element to display in the menu, optional. If used, name should not be used, else both will show up
+     */
+    element?: React.ReactElement,
+    /**
+     * The function to call when the menu item is clicked. Optional
+     */
     callback?: () => void,
+    /**
+     * Sub menus, optional
+     */
     children?: IContextMenu_MenuObj[]
 }
 

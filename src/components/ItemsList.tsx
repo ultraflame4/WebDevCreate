@@ -8,8 +8,6 @@ import {
 } from "@/core";
 import React, {HTMLAttributes, useContext, useEffect, useRef, useState} from "react";
 import "@/assets/components/ItemsListAdapter.scss"
-import ScrollEvent = JQuery.ScrollEvent;
-import {now} from "jquery";
 
 export interface ItemListAdapterData<T> {
     items: T[]
@@ -35,7 +33,9 @@ const SelectedContext = React.createContext<{ dragging: null | HTMLElement, drag
 })
 
 const ItemsListAdapterItem = defineComponent<{
+    item_index: number,
     item_move: (item: HTMLElement, fromIndex: number, toIndex: number) => void,
+    item_delete: (Index: number) => void,
     items_movable: boolean
 }>((props, context) => {
     const ctx = useContext(SelectedContext)
@@ -43,30 +43,12 @@ const ItemsListAdapterItem = defineComponent<{
     const ctxMenu = useContext(ContextMenu)
     const menu: IContextMenu_MenuObj[] = [
         {
-            name: "Delete",
-            children: [
-                {
-                    name: "Delete 2",
-                }, {
-                    name: "Delete 2",
-                    children: [
-                        {
-                            name: "Delete 2",
-                        }, {
-                            name: "Delete 2",
-                        }
-                    ]
-                }
-            ]
-        }, {
-            name: "Delete",
-            children: [
-                {
-                    name: "Delete 2",
-                }, {
-                    name: "Delete 2",
-                }
-            ]
+            element:(
+                <button className={"danger-btn full-width"}>Remove</button>
+            ),
+            callback() {
+                props.item_delete(props.item_index)
+            },
         }
     ]
 
@@ -157,6 +139,13 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
             return newArray
         })
     }
+    function removeItemByIndex(i:number) {
+        setItems(prevState => {
+            let newArray = [...prevState]
+            newArray.splice(i, 1)
+            return newArray
+        })
+    }
 
     function moveItem(item_: HTMLElement, fromIndex: number, toIndex: number) {
         setItems(prevState => {
@@ -179,6 +168,8 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
         })
     }
 
+
+
     return (
         <div {...props}>
             <div className={"component-itemslistadapter-titlebar"}>
@@ -197,7 +188,12 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
                             items.map((value, index, array) => {
 
                                 return (
-                                    <ItemsListAdapterItem key={index} item_move={moveItem} items_movable={itemsMovable}>
+                                    <ItemsListAdapterItem key={index}
+                                                          item_move={moveItem}
+                                                          item_index={index}
+                                                            item_delete={removeItemByIndex}
+                                                          items_movable={itemsMovable}
+                                    >
                                         {
                                             props.data.factory(value, index, array, setItems)
                                         }

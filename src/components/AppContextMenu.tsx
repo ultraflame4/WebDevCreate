@@ -1,16 +1,25 @@
 import {ContextMenu, defineComponent, IContextMenu_MenuObj, mouseInElements} from "@/core";
-import {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import "@/assets/components/AppContextMenu.scss"
+const CtxMenuInstanceData = React.createContext<{expandLeft:boolean}>({expandLeft:true})
 
 const AppContextMenuItem = defineComponent<{ itemData: IContextMenu_MenuObj }>((props, context) => {
+    const ctx = useContext(CtxMenuInstanceData)
+
+    let hasChild = false;
+    if (props.itemData.children) {
+        hasChild = props.itemData.children.length>0
+    }
+
     return (
-        <li className={"app-context-menu-item"}>
+        <li className={"app-context-menu-item"} data-haschild={hasChild} onClick={event => props.itemData.callback?.()}>
             {props.itemData.name}
+            {props.itemData.element}
 
             {/*Children here*/}
             {
                 props.itemData.children ?
-                    <ul className={"app-context-submenu"}>
+                    <ul className={"app-context-submenu"} data-expandleft={ctx.expandLeft} >
                         {
                             props.itemData.children.map(
                                 (value, index) => <AppContextMenuItem itemData={value}/>)
@@ -22,6 +31,7 @@ const AppContextMenuItem = defineComponent<{ itemData: IContextMenu_MenuObj }>((
         </li>
     )
 })
+
 
 
 export const AppContextMenu = defineComponent((props, context) => {
@@ -74,24 +84,32 @@ export const AppContextMenu = defineComponent((props, context) => {
         }
     })
 
+    const ctxMenuWidth = 160
+    const ctxMenuPosition = {
+        left: (location.x+ctxMenuWidth) > window.innerWidth ? window.innerWidth-ctxMenuWidth : location.x,
+    }
+
 
     return (
         <div
             className={"app-context-menu"}
             style={{
                 top: location.y + "px",
-                left: location.x + "px",
+                left: ctxMenuPosition.left + "px",
             }}
             ref={ctxMenuRef}>
-            <ul>
-                {
-                    menuData.map((value, index) => {
-                        return (
-                            <AppContextMenuItem key={index} itemData={value}/>
-                        )
-                    })
-                }
-            </ul>
+            <CtxMenuInstanceData.Provider value={{expandLeft: !((location.x+ctxMenuWidth * 2) > window.innerWidth)}}>
+                <ul>
+                    {
+                        menuData.map((value, index) => {
+                            return (
+                                <AppContextMenuItem key={index} itemData={value}/>
+                            )
+                        })
+                    }
+                </ul>
+            </CtxMenuInstanceData.Provider>
+
         </div>
     )
 })

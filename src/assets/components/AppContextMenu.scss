@@ -4,7 +4,7 @@
   border: 1px solid black;
   border-radius: 6px;
   filter: drop-shadow(1px 1px 3px vars.$bg-active);
-
+  width: 10em;
 }
 
 .app-context-menu-item:hover,ul:hover{
@@ -39,7 +39,7 @@
     padding: 0.2em;
     background: vars.$bg;
     box-sizing: border-box;
-    width: 100px;
+
     flex-direction: column;
     gap: 10px;
   }

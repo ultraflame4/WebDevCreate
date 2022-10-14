@@ -38,10 +38,11 @@ export const AppContextMenu = defineComponent((props, context) => {
     const mouseX = useRef(0)
     const mouseY = useRef(0)
     const [location, setLocation] = useState({x: 0, y: 0})
-
     const ctxMenuRef = useRef<HTMLDivElement>(null)
     const ctxMenu = useContext(ContextMenu)
     const [menuData, setMenuData] = useState<IContextMenu_MenuObj[]>([])
+
+    const isMenuJustOpen = useRef(false)
 
     useEffect(() => {
         ctxMenu.onOpenMenu = (e, menu_data) => {
@@ -52,9 +53,9 @@ export const AppContextMenu = defineComponent((props, context) => {
 
             setLocation({x: e.clientX, y: e.clientY})
             setMenuData(menu_data)
+            isMenuJustOpen.current = true
         }
     }, [ctxMenu])
-
 
     useEffect(() => {
 
@@ -67,11 +68,15 @@ export const AppContextMenu = defineComponent((props, context) => {
             if (!ctxMenuRef.current) {
                 return
             }
-            let results = mouseInElements(mouseX.current, mouseY.current, [ctxMenuRef.current])
-            if (!results) {
+
+            if (!isMenuJustOpen.current) {
                 setMenuData([])
                 ctxMenuRef.current.classList.add("hidden")
             }
+            else{
+                isMenuJustOpen.current=false
+            }
+
         }
 
         document.addEventListener("mousemove", mouseMove)
@@ -83,6 +88,10 @@ export const AppContextMenu = defineComponent((props, context) => {
             document.removeEventListener("contextmenu", mouseClick)
         }
     })
+
+
+
+
 
     const ctxMenuWidth = 160
     const ctxMenuPosition = {

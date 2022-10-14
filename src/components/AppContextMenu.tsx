@@ -76,7 +76,6 @@ export const AppContextMenu = defineComponent((props, context) => {
             else{
                 isMenuJustOpen.current=false
             }
-
         }
 
         document.addEventListener("mousemove", mouseMove)

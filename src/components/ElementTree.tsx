@@ -1,4 +1,5 @@
 import {
+    ContextMenu,
     defineComponent,
     getHtmlChildrenArray,
     getQuerySelector,
@@ -9,6 +10,7 @@ import {
 import React, {useContext, useEffect, useRef, useState} from "react";
 import "@/assets/components/ElementTree.scss"
 import $ from "jquery";
+import {GetElementOptions} from "@/components/Inspector/ElementOptions";
 
 
 interface IElementTreeProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -37,15 +39,16 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
     const rootRef = useRef<HTMLLIElement>(null)
     const context = useContext(ElementTreeCtx)
     const appContext = useContext(ProjectBuilderContext)
+    const appCtxMenu = useContext(ContextMenu)
+
     const [children, setChildren] = useState(new Array<Element>())
     const [elementName, setElementName] = useState<string>("")
 
     useEffect(() => {
         setElementName(props.el.id)
-    },[props.el])
+    }, [props.el])
 
     useEffect(() => {
-
 
         if (children.length !== props.el.childElementCount) {
             setChildren(getHtmlChildrenArray(props.el))
@@ -94,7 +97,7 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
         el?.classList.remove("drag-over-center");
     }
 
-    function OnDragStart(ev: React.DragEvent<HTMLLIElement>) {
+    function OnDragStart(ev: React.DragEvent<HTMLLIElement>) {-
         ev.stopPropagation()
 
         let queryString = getQuerySelector(props.el)
@@ -213,9 +216,28 @@ const ElementTreeItem = defineComponent<IElementTreeItemProps>((props) => {
 
     }
 
+
+    function OnContextMenu(ev: React.MouseEvent<HTMLLIElement>) {
+        ev.stopPropagation()
+        console.log(props.el)
+        appCtxMenu.createMenu(ev, GetElementOptions(props.el,appContext).map(value => {
+            return {
+                element: value,
+            }
+        }))
+    }
+
     return (
-        <li {...props} className={"element-tree-item"} draggable={true} onDragOver={OnDragOver}
-            onDragStart={OnDragStart} onDrop={OnDrop} onDragLeave={OnDragLeave} ref={rootRef}>
+        <li {...props}
+            className={"element-tree-item"}
+            draggable={true}
+            onDragOver={OnDragOver}
+            onDragStart={OnDragStart}
+            onDrop={OnDrop}
+            onDragLeave={OnDragLeave}
+            onContextMenu={OnContextMenu}
+            ref={rootRef}
+        >
             <p ref={itemRef} onClick={focusThis}>
                 {
                     children.length > 0 ?

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {createContext} from "react";
 import $ from "jquery"
 
 export function defineComponent<T>(component: React.FunctionComponent<React.PropsWithChildren<T>>): React.FunctionComponent<React.PropsWithChildren<T>> {
@@ -130,7 +130,6 @@ export class ObservableValue<T> {
 }
 
 
-
 export function useObservableValue<T>(observableValue: ObservableValue<T> | null | undefined): T | null {
     if (!observableValue) {
         return null;
@@ -148,6 +147,12 @@ export function useObservableValue<T>(observableValue: ObservableValue<T> | null
     return value
 }
 
+/**
+ * returns the first element that the mouse is over, else null
+ * @param mouseX
+ * @param mouseY
+ * @param elements
+ */
 export function mouseInElements(mouseX: number, mouseY: number, elements: HTMLElement[]) {
     for (let element of elements) {
         let rect = element.getBoundingClientRect()
@@ -157,3 +162,65 @@ export function mouseInElements(mouseX: number, mouseY: number, elements: HTMLEl
     }
     return null
 }
+
+
+export interface IContextMenu_MenuObj {
+    /**
+     * The text to display in the menu, optional
+     */
+    name?: string,
+    /**
+     * The element to display in the menu, optional. If used, name should not be used, else both will show up
+     */
+    element?: React.ReactElement,
+    /**
+     * The function to call when the menu item is clicked. Optional
+     */
+    callback?: () => void,
+    /**
+     * Sub menus, optional
+     */
+    children?: IContextMenu_MenuObj[]
+}
+
+export interface IContextMenu {
+    /**
+     * Creates and opens a context menu. Call this function when you want to open a context menu. e.g. on right click
+     * @param menu
+     */
+    createMenu: (event: React.MouseEvent, menu: IContextMenu_MenuObj[]) => void
+
+    /**
+     * This is a callback function that is called when the context menu is opened. Has to be set before the context menu is opened.
+     * @param menu_data
+     */
+    onOpenMenu?: (event: React.MouseEvent, menu_data: IContextMenu_MenuObj[]) => void
+}
+
+
+export const ContextMenu = React.createContext<IContextMenu>(
+    {
+        createMenu: (e, _: IContextMenu_MenuObj[]) => {
+            e.preventDefault()
+            console.log("No context menu defined")
+        },
+        onOpenMenu: (e, _: IContextMenu_MenuObj[]) => {
+        }
+    }
+)
+
+export const ContextMenuProvider = defineComponent((props, context) => {
+    const menuCtxObj: IContextMenu = {
+        createMenu(event: React.MouseEvent, menu: IContextMenu_MenuObj[]): void {
+            event.preventDefault()
+
+            this.onOpenMenu?.(event, menu)
+
+        }
+    }
+    return (
+        <ContextMenu.Provider value={menuCtxObj}>
+            {props.children}
+        </ContextMenu.Provider>
+    )
+})

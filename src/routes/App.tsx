@@ -1,4 +1,11 @@
-import {defineComponent, IProjectBuilderContext, ObservableValue, ProjectBuilderContext} from "@/core";
+import {
+    defineComponent,
+    IProjectBuilderContext,
+    ObservableValue,
+    ProjectBuilderContext,
+    ContextMenu,
+    ContextMenuProvider
+} from "@/core";
 import "@/assets/App.scss"
 
 import ProjectPreviewPanel from "@/components/ProjectPreviewPanel";
@@ -8,7 +15,7 @@ import $ from "jquery"
 import htmlElements from "@/htmlElements.json";
 import {Sidebar} from "@/components/Sidebar";
 import {Inspector} from "@/components/Inspector";
-
+import {AppContextMenu} from "@/components/AppContextMenu";
 
 export default defineComponent((props, context) => {
     let templateString = $.ajax({
@@ -33,25 +40,27 @@ export default defineComponent((props, context) => {
 
 
     return (
-        <ProjectBuilderContext.Provider value={ctxObj}>
+        <ContextMenuProvider>
+            <ProjectBuilderContext.Provider value={ctxObj}>
 
-            <div id={"app"}>
-                <header id={"app-header"}>
-                    <h2>WebDevCreate</h2>
-                </header>
-                <div id={"sidebar"}>
-                    <Sidebar/>
-                </div>
-                <div id={"project-preview"}>
-                    <ProjectPreviewPanel/>
-                </div>
+                <div id={"app"}>
+                    <header id={"app-header"}>
+                        <h2>WebDevCreate</h2>
+                    </header>
+                    <div id={"sidebar"}>
+                        <Sidebar/>
+                    </div>
+                    <div id={"project-preview"}>
+                        <ProjectPreviewPanel/>
+                    </div>
 
-                <div id={"inspector"}>
-                    <p className={"sidebar-title"}>Inspector</p>
-                    <Inspector/>
+                    <div id={"inspector"}>
+                        <p className={"sidebar-title"}>Inspector</p>
+                        <Inspector/>
+                    </div>
                 </div>
-            </div>
-
-        </ProjectBuilderContext.Provider>
+                <AppContextMenu/>
+            </ProjectBuilderContext.Provider>
+        </ContextMenuProvider>
     );
 })

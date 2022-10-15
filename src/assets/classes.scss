@@ -4,7 +4,7 @@
   box-sizing: border-box;
   border: 1px solid black;
   border-radius: 0.5em;
-  transition: all ease-in 120ms;
+  transition: all linear 100ms;
 
   display: flex;
   align-items: center;
@@ -13,10 +13,12 @@
   user-select: none;
   background: whitesmoke;
 
+  cursor: pointer;
+
   &:hover {
-    border-color: vars.$line-color-highlight;
-    color: vars.$line-color-highlight;
-    background: white;
+    background: vars.$line-color-highlight;
+    color: whitesmoke;
+    border-color: whitesmoke;;
   }
 
  &:active {
@@ -35,4 +37,8 @@
     background: red;
     border-color: red;
   }
+}
+
+.full-width {
+  width: 100%;
 }

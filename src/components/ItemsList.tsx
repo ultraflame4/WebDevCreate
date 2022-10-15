@@ -1,14 +1,19 @@
-import {defineComponent, getRelativeCoords, getRelativePercentCoords, mouseInElements, ObservableValue} from "@/core";
+import {
+    ContextMenu,
+    defineComponent,
+    getRelativeCoords,
+    getRelativePercentCoords, IContextMenu_MenuObj,
+    mouseInElements,
+    ObservableValue
+} from "@/core";
 import React, {HTMLAttributes, useContext, useEffect, useRef, useState} from "react";
 import "@/assets/components/ItemsListAdapter.scss"
-import ScrollEvent = JQuery.ScrollEvent;
-import {now} from "jquery";
 
 export interface ItemListAdapterData<T> {
     items: T[]
     itemCreator: () => T
     factory: (item: T, index: number, items: T[], setItems: React.Dispatch<React.SetStateAction<string[]>>) => React.ReactElement | string,
-    itemsUpdate: (updatedItems:T[])=>void
+    itemsUpdate: (updatedItems: T[]) => void
 
 }
 
@@ -28,11 +33,24 @@ const SelectedContext = React.createContext<{ dragging: null | HTMLElement, drag
 })
 
 const ItemsListAdapterItem = defineComponent<{
+    item_index: number,
     item_move: (item: HTMLElement, fromIndex: number, toIndex: number) => void,
+    item_delete: (Index: number) => void,
     items_movable: boolean
 }>((props, context) => {
     const ctx = useContext(SelectedContext)
     const itemRef = React.useRef<HTMLLIElement>(null)
+    const ctxMenu = useContext(ContextMenu)
+    const menu: IContextMenu_MenuObj[] = [
+        {
+            element:(
+                <button className={"danger-btn full-width"}>Remove</button>
+            ),
+            callback() {
+                props.item_delete(props.item_index)
+            },
+        }
+    ]
 
     function startDrag() {
         if (!itemRef.current) return;
@@ -89,9 +107,10 @@ const ItemsListAdapterItem = defineComponent<{
         }
     }
 
-    return <li ref={itemRef}>
+    return <li ref={itemRef} onContextMenu={e => ctxMenu.createMenu(e, menu)}>
         <div>{props.children}</div>
-        {props.items_movable ? <span className="material-symbols-outlined" onMouseDown={startDrag}>drag_indicator</span>:""}
+        {props.items_movable ?
+            <span className="material-symbols-outlined" onMouseDown={startDrag}>drag_indicator</span> : ""}
     </li>
 })
 
@@ -112,10 +131,18 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
             return [...prevState, props.data.itemCreator()]
         })
     }
+
     function removeItem() {
         setItems(prevState => {
             let newArray = [...prevState]
             newArray.pop()
+            return newArray
+        })
+    }
+    function removeItemByIndex(i:number) {
+        setItems(prevState => {
+            let newArray = [...prevState]
+            newArray.splice(i, 1)
             return newArray
         })
     }
@@ -141,6 +168,8 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
         })
     }
 
+
+
     return (
         <div {...props}>
             <div className={"component-itemslistadapter-titlebar"}>
@@ -159,7 +188,12 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
                             items.map((value, index, array) => {
 
                                 return (
-                                    <ItemsListAdapterItem key={index} item_move={moveItem} items_movable={itemsMovable}>
+                                    <ItemsListAdapterItem key={index}
+                                                          item_move={moveItem}
+                                                          item_index={index}
+                                                            item_delete={removeItemByIndex}
+                                                          items_movable={itemsMovable}
+                                    >
                                         {
                                             props.data.factory(value, index, array, setItems)
                                         }

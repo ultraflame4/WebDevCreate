@@ -54,7 +54,12 @@ export const AppContextMenu = defineComponent((props, context) => {
 
             setLocation({x: e.clientX, y: e.clientY})
             setMenuData(menu_data)
+            // ensure that if that when menu is opened and the mouse click for opening the menu is heard by the mouse click listener, it doesn't immediately close the menu
             isMenuJustOpen.current = true
+            setTimeout(() => {
+                // Set it to false in the next event loop to ensure that the menu is closed with a single click.
+                isMenuJustOpen.current = false
+            },0)
         }
     }, [ctxMenu])
 
@@ -69,6 +74,7 @@ export const AppContextMenu = defineComponent((props, context) => {
             if (!ctxMenuRef.current) {
                 return
             }
+
 
             if (!isMenuJustOpen.current) {
                 setMenuData([])

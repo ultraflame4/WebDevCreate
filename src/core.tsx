@@ -204,18 +204,18 @@ export const ContextMenu = React.createContext<IContextMenu>(
             e.preventDefault()
             console.log("No context menu defined")
         },
-        onOpenMenu: (e,_: IContextMenu_MenuObj[]) => {
+        onOpenMenu: (e, _: IContextMenu_MenuObj[]) => {
         }
     }
 )
 
 export const ContextMenuProvider = defineComponent((props, context) => {
-    const menuCtxObj:IContextMenu = {
+    const menuCtxObj: IContextMenu = {
         createMenu(event: React.MouseEvent, menu: IContextMenu_MenuObj[]): void {
             event.preventDefault()
-            if (this.onOpenMenu) {
-                this.onOpenMenu(event, menu)
-            }
+
+            this.onOpenMenu?.(event, menu)
+
         }
     }
     return (

@@ -40,6 +40,7 @@ export const AppContextMenu = defineComponent((props, context) => {
     const [location, setLocation] = useState({x: 0, y: 0})
     const ctxMenuRef = useRef<HTMLDivElement>(null)
     const ctxMenu = useContext(ContextMenu)
+
     const [menuData, setMenuData] = useState<IContextMenu_MenuObj[]>([])
 
     const isMenuJustOpen = useRef(false)

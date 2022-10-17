@@ -63,7 +63,6 @@ export default defineComponent((props, context) => {
         builderCtx.previewDimensions.width.subscribe(OnPreviewDimensionChange)
         OnPreviewDimensionChange()
         return () => {
-            // observer.disconnect()
             builderCtx.previewDimensions.auto.unsubscribe(OnPreviewDimensionChange)
             builderCtx.previewDimensions.scale.unsubscribe(OnPreviewDimensionChange)
             builderCtx.previewDimensions.width.unsubscribe(OnPreviewDimensionChange)
@@ -117,7 +116,7 @@ export default defineComponent((props, context) => {
                         <input type="number" min="0" defaultValue={builderCtx.previewDimensions.width.value}
                                onChange={setWidth}/>
                     </span>
-                    <br/>
+                        <br/>
                     <span className={"dim-input"}>
                         height:
                         <input type="number" min="0" defaultValue={builderCtx.previewDimensions.height.value}

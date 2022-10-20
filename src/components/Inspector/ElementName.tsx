@@ -66,7 +66,13 @@ export const ElementName = defineInspectorItem("Name & Classes", (props, context
                             return <ClasslistItem itemsetter={setItems} itemval={item} itemindex={index} itemarray={array}/>
                         },
                         itemsUpdate(updatedItems: string[]): void {
-                            props.currentElement.className = updatedItems.join(" ");
+                            let classString = updatedItems.join(" ").trim()
+                            if (classString.length>0){
+                                props.currentElement.className=classString
+                            }
+                            else{
+                                props.currentElement.removeAttribute("class")
+                            }
 
                         }
                     })}

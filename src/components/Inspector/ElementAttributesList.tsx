@@ -13,22 +13,35 @@ interface attributeItem {
 interface itemProps {
     index: number;
     itemsSetter: React.Dispatch<React.SetStateAction<attributeItem[]>>;
-    itemsArray: attributeItem[]
+    itemsArray: attributeItem[],
+    item: attributeItem
 }
 
+interface compAttrItemProps {
+    attrName: string,
+    attrInitialValue: string | undefined,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
 
-const ElementAttributeItemValue = defineComponent<{ attrName:string,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void }>((props, context) => {
+const ElementAttributeItemValue = defineComponent<compAttrItemProps>((props, context) => {
+    const inputRef = useRef<HTMLInputElement>(null)
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.value = props.attrInitialValue ?? ""
+        }
+    }, [props.attrInitialValue])
 
     return (
         <>
-            <input type={"text"} placeholder={"Value"} onChange={props.onChange}/>
+            <input type={"text"} placeholder={"Value"} onChange={props.onChange} ref={inputRef}/>
         </>
     )
 })
 
 
 const ElementAttributeItem = defineComponent<itemProps>((props, context) => {
-    const currentAttrName =  useRef("")
+    const currentAttrName = useRef(props.item.name)
+    const inputRef = useRef<HTMLInputElement>(null)
 
     function onNameChange(e: React.ChangeEvent<HTMLInputElement>) {
         props.itemsSetter(prevState => {
@@ -37,6 +50,7 @@ const ElementAttributeItem = defineComponent<itemProps>((props, context) => {
             return a
         })
     }
+
     function onValueChange(e: React.ChangeEvent<HTMLInputElement>) {
         props.itemsSetter(prevState => {
             let a = [...prevState]
@@ -45,10 +59,19 @@ const ElementAttributeItem = defineComponent<itemProps>((props, context) => {
         })
     }
 
+    useEffect(() => {
+        if (inputRef.current) {
+
+            currentAttrName.current = props.item.name
+            inputRef.current.value = currentAttrName.current;
+        }
+    }, [props.item])
+
     return (
         <div className={"inspector-el-attributes-item"}>
-            <input type={"text"} placeholder={"Name"} list={"html-attributes-datalist"} onChange={onNameChange}/>
-            <ElementAttributeItemValue attrName={currentAttrName.current} onChange={onValueChange}/>
+            <input type={"text"} placeholder={"Name"} list={"html-attributes-datalist"} onChange={onNameChange}
+                   ref={inputRef}/>
+            <ElementAttributeItemValue attrName={currentAttrName.current} attrInitialValue={props.item.value} onChange={onValueChange}/>
         </div>
     )
 })
@@ -62,21 +85,29 @@ export const ElementAttributesList = defineInspectorItem("Attributes", (props, c
                 data={{
                     factory(item, index, items, setItems): React.ReactElement | string {
                         return <ElementAttributeItem itemsArray={items} itemsSetter={setItems} index={index}
-                                                     key={index}/>
+                                                     key={index} item={item}/>
                     },
-                    itemCreator():attributeItem {
+                    itemCreator(): attributeItem {
                         return {name: "", value: ""}
                     },
-                    items: [],
-                    itemsUpdate(updatedItems): void {
-                        updatedItems.forEach(item => {
-                            //todo get element attributs on load
-                            try{
-                                props.currentElement.setAttribute(item.name,item.value)
-                            }
-                            catch (e){
+                    items: Array.from(props.currentElement.attributes).map((item, index) => {
+                        return {name: item.name, value: item.value}
+                    }),
+                    itemsUpdate(updatedItems:attributeItem[]): void {
+                        console.log("---")
 
+                        for (let i=0; i < props.currentElement.attributes.length; i++) {
+                            let name = props.currentElement.attributes[0].name.toLowerCase().trim()
+                            if (updatedItems.find(item => item.name.toLowerCase().trim() === name) === undefined) {
+                                props.currentElement.removeAttribute(name);
                             }
+                        }
+
+                        updatedItems.forEach(item => {
+                            try{
+                                props.currentElement.setAttribute(item.name,item.value??"")
+                            }
+                            catch (e) {}
                         })
                     }
                 }}/>
@@ -85,7 +116,6 @@ export const ElementAttributesList = defineInspectorItem("Attributes", (props, c
                     Object.entries(htmlAttributes).map((value, index) => {
                             const [key, val] = value;
                             if (!val.elements.includes(props.currentElement.tagName.toLowerCase()) && !val.elements.includes("*")) {
-                                console.log("hey", val.elements, value)
                                 return <></>
                             }
                             return <option value={key} key={index}/>

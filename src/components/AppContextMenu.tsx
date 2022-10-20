@@ -107,7 +107,7 @@ export const AppContextMenu = defineComponent((props, context) => {
 
     return (
         <div
-            className={"app-context-menu"}
+            className={"app-context-menu hidden"}
             style={{
                 top: location.y + "px",
                 left: ctxMenuPosition.left + "px",

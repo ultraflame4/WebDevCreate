@@ -12,7 +12,7 @@ import "@/assets/components/ItemsListAdapter.scss"
 export interface ItemListAdapterData<T> {
     items: T[]
     itemCreator: () => T
-    factory: (item: T, index: number, items: T[], setItems: React.Dispatch<React.SetStateAction<string[]>>) => React.ReactElement | string,
+    factory: (item: T, index: number, items: T[], setItems: React.Dispatch<React.SetStateAction<T[]>>) => React.ReactElement | string,
     itemsUpdate: (updatedItems: T[]) => void
 
 }

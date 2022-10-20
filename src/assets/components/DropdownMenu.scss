@@ -15,6 +15,7 @@
   border: 1px solid vars.$line-color;
   border-radius: 6px;
   position: relative;
+  transition: all ease 200ms;
 
   &:not(.checked) {
     & > span {
@@ -41,26 +42,55 @@
 *:has(.dropdown-menu) {
   position: relative;
   width: available;
+
+
+}
+
+@keyframes dropdown-anim {
+  from{
+    max-height: 0;
+  }
+  to{
+    max-height: 100px;
+  }
 }
 
 *:has(.dropdown-input.checked) {
   & > .dropdown-menu {
     display: initial;
-
+    animation: dropdown-anim ease-in-out 200ms;
   }
 
 }
 
+@keyframes dropdown-anim2 {
+  from{
+    opacity: 1;
+    max-height: 100px;
+  }
+  to{
+
+    max-height: 0;
+    border: none;
+    padding: 0;
+    visibility: hidden;
+  }
+}
+
 .dropdown-menu {
-  display: none;
+
   position: absolute;
   font-size: 0.8em;
   background: vars.$bg;
+
+  animation: dropdown-anim2 ease-in-out 200ms;
+  animation-fill-mode: forwards;
 
   z-index: 2;
   width: 100%;
   left: 0;
   top: 100%;
+
   max-height: 100px;
   overflow: auto;
 
@@ -79,7 +109,7 @@
     padding: 0.2em 0.4em;
     border-radius: 4px;
 
-
+    transition: all ease 200ms;
     &:hover{
 
       background: vars.$bg-hover

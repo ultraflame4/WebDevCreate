@@ -174,10 +174,10 @@ export const ItemsListAdapter = defineComponent<ItemListAdapterProps>((props, co
         <div {...props}>
             <div className={"component-itemslistadapter-titlebar"}>
                 <p>{props.title}</p>
-                <span className="material-symbols-outlined tools-item" title={"Add item to list"}
+                <span className="material-symbols-outlined tools-item" title={"Remove last item"}
                       onClick={removeItem}>remove</span>
 
-                <span className="material-symbols-outlined tools-item" title={"Add item to list"}
+                <span className="material-symbols-outlined tools-item" title={"Add item"}
                       onClick={addItem}>add</span>
 
             </div>

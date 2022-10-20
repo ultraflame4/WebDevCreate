@@ -8,11 +8,13 @@ import {ElementDimensions} from "@/components/Inspector/ElementDimensions";
 import {ElementText} from "@/components/Inspector/ElementText";
 import {ElementOptions} from "@/components/Inspector/ElementOptions";
 import {InspectorItem} from "@/inspector";
+import {ElementAttributesList} from "@/components/Inspector/ElementAttributesList";
 
 const InspectorItems: InspectorItem[] = [
     ElementName,
     ElementDimensions,
     ElementText,
+    ElementAttributesList,
     ElementOptions
 ]
 

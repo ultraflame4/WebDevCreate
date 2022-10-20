@@ -82,6 +82,7 @@
       margin: auto 0;
       height: calc(100% - 0.5em);
       flex-grow: 1;
+      overflow: clip;
     }
 
     &>span{

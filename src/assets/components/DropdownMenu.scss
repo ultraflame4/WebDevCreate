@@ -46,36 +46,18 @@
 
 }
 
-@keyframes dropdown-anim {
-  from{
-    max-height: 0;
-  }
-  to{
-    max-height: 100px;
-  }
-}
 
 *:has(.dropdown-input.checked) {
   & > .dropdown-menu {
     display: initial;
-    animation: dropdown-anim ease-in-out 200ms;
-  }
-
-}
-
-@keyframes dropdown-anim2 {
-  from{
+    max-height: 200px;
+    animation: none;
+    visibility: initial;
     opacity: 1;
-    max-height: 100px;
   }
-  to{
 
-    max-height: 0;
-    border: none;
-    padding: 0;
-    visibility: hidden;
-  }
 }
+
 
 .dropdown-menu {
 
@@ -83,17 +65,16 @@
   font-size: 0.8em;
   background: vars.$bg;
 
-  animation: dropdown-anim2 ease-in-out 200ms;
-  animation-fill-mode: forwards;
-
   z-index: 2;
   width: 100%;
   left: 0;
   top: 100%;
 
-  max-height: 100px;
-  overflow: auto;
 
+  max-height: 0;
+  transition: max-height ease 200ms, opacity ease 300ms;
+  overflow: auto;
+  opacity: 0;
   border-radius: 0 0 8px 8px;
   border: 1px solid black;
   border-top: none;
